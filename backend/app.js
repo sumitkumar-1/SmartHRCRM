@@ -1,18 +1,37 @@
-const express = require('express');
+const express = require("express");
 const app = express();
-const user = require("./controllers/UserController.js");
-require('dotenv').config();
+var cors = require('cors');
+require("dotenv").config();
+const path = require('path');
 
-app.use(express.static(process.cwd() + process.env.DIST_LOCATION))
+app.use(express.json());
+app.use(cors());
 
-app.get('/', (req, res) => {
-    const fileName = process.cwd() + process.env.DIST_LOCATION + "index.html";
-    console.log("Serving File " + fileName);
-    res.sendFile(fileName);
-})
+const userRouter = require('./routes/user.route');
+const sessionRouter = require('./routes/session.route');
+const demandRouter = require('./routes/demand.route');
+const demandhandlerRouter = require('./routes/demandhandler.route');
+const profileRouter = require('./routes/profile.route');
+const shortlistedProfileRouter = require('./routes/shortlistedprofile.route');
+const vendorRouter = require('./routes/vendor.route');
 
-app.use("/users", user);
+app.use('/api', sessionRouter);
+app.use('/api/users', userRouter);
+app.use('/api/demand', demandRouter);
+app.use('/api/demandhandler', demandhandlerRouter);
+app.use('/api/profile', profileRouter);
+app.use('/api/shortlistedprofile', shortlistedProfileRouter);
+app.use('/api/vendor', vendorRouter);
 
-app.listen(3000, function() {
-    console.log("listening on 3000")
-})
+app.use(express.static(path.join(__dirname, 'views')));
+
+app.get("/", (req, res) => {
+  const fileName = process.cwd() + process.env.DIST_LOCATION + "index.html";
+  console.log("Serving File " + fileName);
+  res.sendFile(fileName);
+});
+
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+  console.log(`Server started on port ${port}`);
+});
