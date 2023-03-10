@@ -1,4 +1,7 @@
+import { HttpErrorResponse } from '@angular/common/http';
+import { UserService } from './../../services/user.service';
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -7,9 +10,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HeaderComponent implements OnInit {
 
-  constructor() { }
+  constructor(private router: Router, private userService: UserService) { }
 
   ngOnInit(): void {
+    console.log("Init");
   }
 
+  logout() {
+    this.userService.logout().subscribe((data: any) => {
+      localStorage.removeItem('token');
+      this.router.navigate(['login']);
+    }, (err: HttpErrorResponse) => {console.log(err)});
+    console.log("logout");
+  }
 }

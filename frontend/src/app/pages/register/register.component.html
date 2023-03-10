@@ -1,1 +1,86 @@
-<p>register works!</p>
+<form [formGroup]="registerForm" class="form-container">
+    <h1 class="text-center" style="font-weight: bold;">User Registration</h1>
+    <mat-card>
+      <mat-card-content>
+        <div class="row">
+          <div class="col-md-6">
+            <mat-form-field class="full-width" appearance="outline">
+              <mat-label>First Name</mat-label>
+              <input matInput placeholder="First Name" formControlName="firstname">
+            </mat-form-field>
+          </div>
+          <div class="col-md-6">
+            <mat-form-field class="full-width" appearance="outline">
+              <mat-label>Last Name</mat-label>
+              <input matInput placeholder="Last Name" formControlName="lastname">
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <mat-form-field class="full-width" appearance="outline">
+              <mat-label>Email</mat-label>
+              <input matInput type="email" placeholder="Email" formControlName="email">
+            </mat-form-field>
+          </div>
+          <div class="col-md-6">
+            <mat-form-field class="full-width" appearance="outline">
+              <mat-label>Phone</mat-label>
+              <input matInput placeholder="Phone" formControlName="phone">
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+              <mat-form-field class="full-width" appearance="outline">
+                <mat-label>Password</mat-label>
+                <input matInput type="password" placeholder="Password" formControlName="password">
+              </mat-form-field>
+            </div>
+            <div class="col-md-6">
+              <mat-form-field class="full-width" appearance="outline">
+                <mat-label>Confirm Password</mat-label>
+                <input matInput type="password" placeholder="Confirm Password" formControlName="confirmPassword">
+              </mat-form-field>
+            </div>
+          </div>
+        <div class="row">
+         <div class="col-md-6 top-padding">
+            <mat-form-field class="full-width" appearance="outline">
+              <mat-label>Sex</mat-label>
+              <mat-select formControlName="sex">
+                <mat-option value="male">Male</mat-option>
+                <mat-option value="female">Female</mat-option>
+                <mat-option value="other">Other</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="col-md-6 top-padding">
+            <mat-form-field class="full-width" appearance="outline">
+              <mat-label>Date of Birth</mat-label>
+              <input matInput [matDatepicker]="picker" formControlName="dob">
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <mat-form-field class="full-width" appearance="outline">
+                  <mat-label>City</mat-label>
+                  <input matInput placeholder="city" formControlName="city">
+                </mat-form-field>
+            </div>
+            <div class="col-md-6">
+                <mat-form-field class="full-width" appearance="outline">
+                  <mat-label>Country</mat-label>
+                  <input matInput placeholder="country" formControlName="country">
+                </mat-form-field>
+            </div>
+        </div>
+      </mat-card-content>
+      <mat-card-actions style="text-align: right;">
+        <button (click)="onSubmit(registerForm)" mat-raised-button color="primary" [disabled]="!registerForm.valid  || userForm.confirmPassword.value != userForm.password.value"><mat-icon>person_add</mat-icon> Register</button>
+      </mat-card-actions>
+    </mat-card>
+</form>
