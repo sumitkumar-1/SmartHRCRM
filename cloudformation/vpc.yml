@@ -1,0 +1,18 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: VPC using Cloudformation
+Parameters:
+  repoName: 
+    Description: Name for ecr repo 
+    Type: String
+Resources:
+  ecrRepo:
+    Type: AWS::ECR::Repository
+    Properties: 
+      RepositoryName: !Sub ${repoName}-repo
+      ImageScanningConfiguration: 
+        ScanOnPush: true
+Outputs:
+  ecrArn:
+    Value: !GetAtt ecrRepo.Arn
+    Export:
+      Name: ecrArn

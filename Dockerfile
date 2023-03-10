@@ -12,7 +12,7 @@ RUN cd /usr/src/app/frontend && npm install @angular/cli && npm install && npm r
 RUN cd /usr/src/app/backend && npm install
 
 # expose port
-EXPOSE 3000
+EXPOSE 80
 
 WORKDIR /usr/src/app/backend
 
