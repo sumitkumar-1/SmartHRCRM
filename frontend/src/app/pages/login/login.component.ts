@@ -30,6 +30,7 @@ export class LoginComponent implements OnInit {
       if(data.message == "OK") {
         console.log(data);
         localStorage.setItem('token', data.token);
+        localStorage.setItem('userid', data.id);
         this.router.navigate(['dashboard']);
       }
     }, (err: HttpErrorResponse) => {console.log(err); this.error = err.message;});

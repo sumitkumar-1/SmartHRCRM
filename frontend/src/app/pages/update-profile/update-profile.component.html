@@ -1,1 +1,168 @@
-<p>update-profile works!</p>
+<form [formGroup]="profileForm" class="form-container">
+    <mat-card>
+      <mat-card-content>
+        <div class="row">
+          <div class="col-md-6">
+            <mat-form-field class="full-width" appearance="outline">
+              <mat-label>First Name</mat-label>
+              <input matInput placeholder="First Name" formControlName="firstname">
+            </mat-form-field>
+          </div>
+          <div class="col-md-6">
+            <mat-form-field class="full-width" appearance="outline">
+              <mat-label>Last Name</mat-label>
+              <input matInput placeholder="Last Name" formControlName="lastname">
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <mat-form-field class="full-width" appearance="outline">
+              <mat-label>Email</mat-label>
+              <input matInput type="email" placeholder="Email" formControlName="email">
+            </mat-form-field>
+          </div>
+          <div class="col-md-6">
+            <mat-form-field class="full-width" appearance="outline">
+              <mat-label>Contact</mat-label>
+              <input matInput placeholder="Contact" formControlName="contact">
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+              <mat-form-field class="full-width" appearance="outline">
+                <mat-label>Alternate Contact</mat-label>
+                <input matInput placeholder="Alternate Contact" formControlName="alternatecontact">
+              </mat-form-field>
+            </div>
+            <div class="col-md-6">
+              <mat-form-field class="full-width" appearance="outline">
+                <mat-label>WhatsApp Contact</mat-label>
+                <input matInput placeholder="WhatsApp Contact" formControlName="whatsappcontact">
+              </mat-form-field>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 top-padding">
+                <mat-form-field class="full-width" appearance="outline">
+                    <mat-label>LinkedIn Profile</mat-label>
+                    <input matInput placeholder="LinkedIn Profile" formControlName="linkedinprofile">
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 top-padding">
+                <mat-form-field class="full-width" appearance="outline">
+                    <mat-chip-list #chipList aria-label="Skill selection" [disabled]="profileForm.disabled">
+                      <mat-chip *ngFor="let skill of skills" [selectable]="selectable"
+                               [removable]="removable" (removed)="remove(skill)">
+                        {{skill.name}}
+                        <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                      </mat-chip>
+                      <input placeholder="New skill..."
+                             [matChipInputFor]="chipList"
+                             [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                             [matChipInputAddOnBlur]="addOnBlur"
+                             (matChipInputTokenEnd)="add($event)">
+                    </mat-chip-list>
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <mat-form-field class="full-width" appearance="outline">
+                  <mat-label>Total Experience</mat-label>
+                  <input matInput placeholder="Total Experience" formControlName="totalexp">
+                </mat-form-field>
+            </div>
+            <div class="col-md-6">
+                <mat-form-field class="full-width" appearance="outline">
+                  <mat-label>Relevant Experience</mat-label>
+                  <input matInput placeholder="Relevant Experience" formControlName="relevantexp">
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-9 top-padding">
+                <mat-form-field class="full-width" appearance="outline">
+                    <mat-label>Current Organization</mat-label>
+                    <input matInput placeholder="Current Organization" formControlName="currentorganization">
+                  </mat-form-field>
+            </div>
+            <div class="col-md-3 top-padding">
+                <mat-form-field class="full-width" appearance="outline">
+                    <mat-label>Notice Period</mat-label>
+                    <input matInput placeholder="Notice Period" formControlName="noticeperiod">
+                  </mat-form-field>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 top-padding">
+                <mat-form-field class="full-width" appearance="outline">
+                    <mat-label>Current Location</mat-label>
+                    <input matInput placeholder="Current Location" formControlName="currentlocation">
+                  </mat-form-field>
+            </div>
+            <div class="col-md-6 top-padding">
+                <mat-form-field class="full-width" appearance="outline">
+                    <mat-label>Preffered Location</mat-label>
+                    <input matInput placeholder="Preffered Location" formControlName="prefferedlocation">
+                  </mat-form-field>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 top-padding">
+                <mat-form-field class="full-width" appearance="outline">
+                    <mat-label>Current CTC</mat-label>
+                    <input matInput placeholder="Current CTC" formControlName="ctc">
+                  </mat-form-field>
+            </div>
+            <div class="col-md-6 top-padding">
+                <mat-form-field class="full-width" appearance="outline">
+                    <mat-label>Expected CTC</mat-label>
+                    <input matInput placeholder="Expected CTC" formControlName="ectc">
+                  </mat-form-field>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 top-padding">
+                <mat-form-field class="full-width" appearance="outline">
+                <mat-label>Gender</mat-label>
+                <mat-select formControlName="gender">
+                    <mat-option value="male">Male</mat-option>
+                    <mat-option value="female">Female</mat-option>
+                    <mat-option value="other">Other</mat-option>
+                </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="col-md-6">
+                <mat-form-field class="full-width" appearance="outline">
+                <mat-label>Status</mat-label>
+                <input matInput placeholder="Status" formControlName="status">
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <mat-form-field class="full-width" appearance="outline">
+                  <mat-label>Designation</mat-label>
+                  <input matInput placeholder="Designation" formControlName="designation">
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div style="display: flex; align-items: center;">
+                    <input (change)="this.onFilechange($event)" [disabled]="profileForm.disabled" class="form-control" type="file" id="formFile">
+                    <button mat-raised-button color="primary" [disabled]="profileForm.disabled" (click)="this.upload()"><mat-icon>upload</mat-icon></button>
+                </div>
+            </div>
+        </div>
+      </mat-card-content>
+      <mat-card-actions style="text-align: right;">
+        <button (click)="onEdit()" mat-raised-button color="primary" *ngIf="profileForm.disabled"><mat-icon>edit</mat-icon> Edit</button>
+        <button (click)="onSubmit(profileForm)" mat-raised-button color="primary" *ngIf="profileForm.enabled"><mat-icon>save</mat-icon> Save</button>
+      </mat-card-actions>
+    </mat-card>
+</form>

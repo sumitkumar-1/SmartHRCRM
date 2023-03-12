@@ -42,7 +42,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatTreeModule } from '@angular/material/tree';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import {MatInputModule} from '@angular/material/input';
+import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -103,23 +103,9 @@ import { UpdateProfileComponent } from './pages/update-profile/update-profile.co
     MatTreeModule,
     MatFormFieldModule,
     MatOptionModule,
-    MatMenuModule,
     ReactiveFormsModule,
-    MatInputModule,
-    MatSelectModule,
-    MatTableModule,
-    MatExpansionModule,
-    MatMenuModule,
-    MatGridListModule,
-    MatFormFieldModule,
-    MatSelectModule,
     FormsModule,
-    MatTableModule,
-    MatTabsModule,
-    MatTooltipModule,
-    MatDatepickerModule,
-    MatNativeDateModule, 
-    MatInputModule, NgbModule
+    NgbModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,6 +1,8 @@
 export interface Profile {
     id: string;
-    name: string;
+    userid: string;
+    firstname: string;
+    lastname: string;
     email: string;
     contact: string;
     alternatecontact: string;
