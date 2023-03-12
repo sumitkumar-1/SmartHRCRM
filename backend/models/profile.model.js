@@ -13,7 +13,9 @@ dynamoose.aws.sdk = AWS;
 
 const profileSchema = new dynamoose.Schema({
   id: { type: String, hashKey: true, index: true },
-  name: { type: String, required: true },
+  userid: { type: String, index: true },
+  firstname: { type: String, required: true },
+  lastname: { type: String, required: true },
   email: { type: String, required: true },
   contact: { type: String, required: true },
   alternatecontact: { type: String, required: true },

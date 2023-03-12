@@ -14,8 +14,10 @@ const demandhandlerRouter = require('./routes/demandhandler.route');
 const profileRouter = require('./routes/profile.route');
 const shortlistedProfileRouter = require('./routes/shortlistedprofile.route');
 const vendorRouter = require('./routes/vendor.route');
+const uploaderRouter = require('./routes/uploader.route');
 
 app.use('/api', sessionRouter);
+app.use('/api', uploaderRouter);
 app.use('/api/users', userRouter);
 app.use('/api/demand', demandRouter);
 app.use('/api/demandhandler', demandhandlerRouter);

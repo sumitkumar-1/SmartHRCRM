@@ -2,12 +2,12 @@ const Profile = require('../models/Profile.model');
 const { v4: uuidv4 } = require('uuid');
 
 const createProfile = async (request, response) => {
-    const { name, email, contact, alternatecontact, whatsappcontact, linkedinprofile, skills, totalexp, relevantexp, currentorganization, noticeperiod, currentlocation, prefferedlocation, ctc, ectc, gender, status, cvurl, designation } = request.body;
-
-    const Profile = new Profile({ id: uuidv4(), name, email, contact, alternatecontact, whatsappcontact, linkedinprofile, skills, totalexp, relevantexp, currentorganization, noticeperiod, currentlocation, prefferedlocation, ctc, ectc, gender, status, cvurl, designation });
+    const { userid, firstname, lastname, email, contact, alternatecontact, whatsappcontact, linkedinprofile, skills, totalexp, relevantexp, currentorganization, noticeperiod, currentlocation, prefferedlocation, ctc, ectc, gender, status, cvurl, designation } = request.body;
+    console.log(request.body);
+    const profile = new Profile({ id: uuidv4(), userid, firstname, lastname, email, contact, alternatecontact, whatsappcontact, linkedinprofile, skills, totalexp, relevantexp, currentorganization, noticeperiod, currentlocation, prefferedlocation, ctc, ectc, gender, status, cvurl, designation });
     try {
-        await Profile.save();
-        response.status(201).json(Profile);
+        await profile.save();
+        response.status(201).json(profile);
     } catch (err) {
         response.status(400).json({ message: err.message });
     }
@@ -27,11 +27,11 @@ const getProfileById = async (request, response) => {
     const { id } = request.params;
 
     try {
-        const Profile = await Profile.get(id);
-        if (!Profile) {
+        const profile = await Profile.get(id);
+        if (!profile) {
             return response.status(404).json({ message: 'Profile not found' });
         }
-        response.json(Profile);
+        response.json(profile);
     } catch (err) {
         response.status(500).json({ message: err.message });
     }
@@ -41,8 +41,8 @@ const deleteProfile = async (request, response) => {
   const { id } = request.params;
 
   try {
-    const Profile = await Profile.get(id);
-    Profile.delete();
+    const profile = await Profile.get(id);
+    profile.delete();
     return response.status(200).json({ message: "Profile deleted - " + id });
   } catch (err) {
     response.status(500).json({ message: "Failed to delete Profile - " + id });
@@ -52,7 +52,9 @@ const deleteProfile = async (request, response) => {
 const updateProfile = async (request, response) => {
   const { id } = request.params;
   const updates = {
-    name: request.body.name,
+    userid: request.body.userid,
+    firstname: request.body.firstname,
+    lastname: request.body.lastname,
     email: request.body.email,
     contact: request.body.contact,
     alternatecontact: request.body.alternatecontact,
