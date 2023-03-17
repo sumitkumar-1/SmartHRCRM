@@ -1,0 +1,44 @@
+<app-header></app-header>
+<div class="container">
+    <img [src]="logoUrl" alt="Company Logo" class="logo">
+    <table>
+        <caption></caption>
+        <tr>
+            <th>Company Name:</th>
+            <td>{{profileData.companyname}}</td>
+        </tr>
+        <tr>
+            <th>Job Description:</th>
+            <td>{{profileData.jobdescription}}</td>
+        </tr>
+        <tr>
+            <th>Venue:</th>
+            <td>{{profileData.venue}}</td>
+        </tr>
+        <tr>
+            <th>Mode:</th>
+            <td>{{profileData.mode}}</td>
+        </tr>
+        <tr>
+            <th>Schedule Date:</th>
+            <td>{{profileData.scheduledate}}</td>
+        </tr>
+        <tr>
+            <th>Duration:</th>
+            <td>{{profileData.duration}}</td>
+        </tr>
+        <tr>
+            <th>Panel:</th>
+            <td>{{profileData.panel}}</td>
+        </tr>
+        <tr class="upcoming">
+            <th>Status:</th>
+            <td>{{profileData.status}}</td>
+        </tr>
+        <tr>
+            <th>Operator:</th>
+            <td>{{profileData.operator}}</td>
+        </tr>
+    </table>
+</div>
+<app-footer></app-footer>

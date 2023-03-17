@@ -1,0 +1,95 @@
+<h1 mat-dialog-title>Schedule Interview</h1>
+<div mat-dialog-content>
+  <form [formGroup]="addInterviewform">
+    <div class="row">
+        <div class="col-sm-12">
+            <mat-form-field class="full-width" appearance="outline">
+                <mat-label>User</mat-label>
+                <mat-select formControlName="userid">
+                  <mat-option *ngFor="let item of users" [value]="item.id">{{item.firstname + ' ' + item.lastname}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <mat-form-field class="full-width" appearance="outline">
+                <mat-label>Demand</mat-label>
+                <mat-select formControlName="demandid">
+                  <mat-option *ngFor="let item of demands" [value]="item.id">{{item.description}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <mat-form-field class="full-width" appearance="outline">
+                <mat-label>Company Name</mat-label>
+                <input matInput formControlName="companyname" placeholder="companyname" />
+            </mat-form-field>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <mat-form-field class="full-width" appearance="outline">
+                <mat-label>Job Description</mat-label>
+                <input matInput formControlName="jobdescription" placeholder="Job Description" />
+            </mat-form-field>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <mat-form-field class="full-width" appearance="outline">
+                <mat-label>Schedule Date</mat-label>
+                <input matInput [matDatepicker]="picker" placeholder="Schedule date" formControlName="scheduledate"> 
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <mat-form-field class="full-width" appearance="outline">
+                <mat-label>Status</mat-label>
+                <input matInput formControlName="status" placeholder="status" />
+            </mat-form-field>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <mat-form-field class="full-width" appearance="outline">
+                <mat-label>Venue</mat-label>
+                <input matInput formControlName="venue" placeholder="venue" />
+            </mat-form-field>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <mat-form-field class="full-width" appearance="outline">
+                <mat-label>Mode</mat-label>
+                <input matInput formControlName="mode" placeholder="mode" />
+            </mat-form-field>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <mat-form-field class="full-width" appearance="outline">
+                <mat-label>Duration</mat-label>
+                <input matInput formControlName="duration" placeholder="duration" />
+            </mat-form-field>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <mat-form-field class="full-width" appearance="outline">
+                <mat-label>Panel</mat-label>
+                <input matInput formControlName="panel" placeholder="Panel" />
+            </mat-form-field>
+        </div>
+    </div>
+  </form>
+</div>
+<div mat-dialog-actions>
+  <button mat-raised-button color="primary" (click)="onCancel()">Cancel</button>
+  <button mat-raised-button color="primary" (click)="onSave()">Save</button>
+</div>

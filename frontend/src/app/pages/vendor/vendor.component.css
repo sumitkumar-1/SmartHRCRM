@@ -1,0 +1,41 @@
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-gap: 30px;
+}
+
+.vendor-card {
+    height: 100%;
+}
+
+.vendor-logo {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.status-active {
+    color: green;
+}
+
+.status-inactive {
+    color: red;
+}
+
+.vendor-details {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.vendor-detail {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.vendor-detail mat-icon {
+    margin-right: 10px;
+    color: #888;
+}

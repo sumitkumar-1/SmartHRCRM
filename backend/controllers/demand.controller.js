@@ -2,9 +2,9 @@ const Demand = require('../models/demand.model');
 const { v4: uuidv4 } = require('uuid');
 
 const createDemand = async (request, response) => {
-    const { description, level, qualification, contact, position, skills, yearofexpfrom, yearofexpto, worklocation, workmode, maxnoticeperiod, minnoticeperiod, minsalary, maxsalary, startdate, enddate } = request.body;
+    const { vendorid, description, vacancy, level, qualification, contact, position, skills, yearofexpfrom, yearofexpto, worklocation, workmode, maxnoticeperiod, minnoticeperiod, minsalary, maxsalary, startdate, enddate } = request.body;
 
-    const demand = new Demand({ id: uuidv4(), description, level, qualification, contact, position, skills, yearofexpfrom, yearofexpto, worklocation, workmode, maxnoticeperiod, minnoticeperiod, minsalary, maxsalary, startdate, enddate });
+    const demand = new Demand({ id: uuidv4(), vendorid, description, vacancy, level, qualification, contact, position, skills, yearofexpfrom, yearofexpto, worklocation, workmode, maxnoticeperiod, minnoticeperiod, minsalary, maxsalary, startdate, enddate });
     try {
         await demand.save();
         response.status(201).json(demand);
@@ -52,7 +52,9 @@ const deleteDemand = async (request, response) => {
 const updateDemand = async (request, response) => {
   const { id } = request.params;
   const updates = {
+    vendorid: request.body.vendorid,
     description: request.body.description,
+    vacancy: request.body.vacancy,
     level: request.body.level,
     qualification: request.body.qualification,
     contact: request.body.contact,

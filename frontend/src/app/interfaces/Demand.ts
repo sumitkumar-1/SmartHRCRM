@@ -1,6 +1,8 @@
 export interface Demand {
     id: string;
+    vendorid: string;
     description: string;
+    vacancy: string;
     level: string;
     qualification: string;
     contact: string;

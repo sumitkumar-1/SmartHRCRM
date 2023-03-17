@@ -33,6 +33,7 @@ const profileSchema = new dynamoose.Schema({
   gender: { type: String, required: true },
   status: { type: String, required: true },
   cvurl: { type: String, required: true },
+  profileurl: { type: String, required: true },
   designation: { type: String, required: true },
   updatedat: { type: Date, default: Date.now },
   createdat: { type: Date, default: Date.now }

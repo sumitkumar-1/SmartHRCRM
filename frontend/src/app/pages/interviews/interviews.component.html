@@ -1,0 +1,21 @@
+<app-header></app-header>
+<div class="grid-container" style="margin: 50px;">
+  <mat-card *ngFor="let element of shortlistedProfile" class="mat-elevation-z8">
+    <mat-card-header>
+      <div mat-card-avatar>
+        <mat-icon>assignment_ind</mat-icon>
+      </div>
+      <mat-card-title>{{ element.id.substr(1,6) }}</mat-card-title>
+      <mat-card-subtitle>{{ element.companyname }}</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <p>{{ element.jobdescription }}</p>
+      <p>Schedule Date: {{ element.scheduledate | date }}</p>
+      <p>Status: <span [ngClass]="{ 'status-upcoming': element.status === 'Upcoming', 'status-past': element.status === 'Past' }">{{ element.status }}</span></p>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-button [routerLink]="['/interviewdetail', element.id]">View Details</button>
+    </mat-card-actions>
+  </mat-card>
+</div>
+<app-footer></app-footer>

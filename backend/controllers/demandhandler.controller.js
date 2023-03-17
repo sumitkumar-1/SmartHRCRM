@@ -2,9 +2,9 @@ const DemandHandler = require('../models/demandhandler.model');
 const { v4: uuidv4 } = require('uuid');
 
 const createDemandHandler = async (request, response) => {
-    const { demandid, processingdate, operator, status } = request.body;
+    const { demandid, handlername, operator, processingdate, status } = request.body;
 
-    const demandhandler = new DemandHandler({ id: uuidv4(), demandid, processingdate, operator, status });
+    const demandhandler = new DemandHandler({ id: uuidv4(), demandid, handlername, operator, processingdate, status });
     try {
         await demandhandler.save();
         response.status(201).json(demandhandler);
@@ -51,19 +51,12 @@ const deleteDemandHandler = async (request, response) => {
 
 const updateDemandHandler = async (request, response) => {
   const { id } = request.params;
-  const hashedPassword = await bcrypt.hash(request.body.password, 10);
   const updates = {
-    firstname: request.body.firstname,
-    lastname: request.body.lastname,
-    email: request.body.email,
-    password: hashedPassword,
-    role: request.body.role,
-    dob: request.body.dob,
-    sex: request.body.sex,
-    city: request.body.city,
-    country: request.body.country,
-    designation: request.body.designation,
-    skills: request.body.skills
+    demandid: request.body.demandid,
+    handlername: request.body.handlername,
+    operator: request.body.operator,
+    processingdate: request.body.processingdate,
+    status: request.body.status
   };
 
   DemandHandler.query("id").eq(id).exec((error, results) => {

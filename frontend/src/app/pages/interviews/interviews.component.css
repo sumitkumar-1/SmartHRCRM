@@ -1,0 +1,38 @@
+table {
+    width: 100%;
+}
+
+th {
+    font-weight: bold;
+}
+
+
+.status-upcoming {
+    background-color: red;
+    padding: 5px;
+    font-weight: bold;
+}
+
+.status-past {
+    background-color: green;
+    padding: 5px;
+    font-weight: bold;
+}
+
+
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 20px;
+}
+
+.card-item {
+    padding: 20px;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
+}
+
+@media only screen and (max-width: 768px) {
+    .grid-container {
+        grid-template-columns: 1fr;
+    }
+}

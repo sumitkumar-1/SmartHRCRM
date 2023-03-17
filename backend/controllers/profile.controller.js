@@ -37,6 +37,22 @@ const getProfileById = async (request, response) => {
     }
 };
 
+const getProfileByUserId = async (request, response) => {
+  const { id } = request.params;
+
+  Profile.query("userid").eq(id).exec((error, results) => {
+    if(error) {
+      return response.status(400).json({ message: error });
+    } else {
+      if(results.count == 0) {
+        return response.status(404).json({ message: "Profile not found" });
+      } else {
+        return response.status(200).json(results[0]);
+      }
+    }
+  });
+};
+
 const deleteProfile = async (request, response) => {
   const { id } = request.params;
 
@@ -99,5 +115,6 @@ module.exports = {
     getProfiles,
     getProfileById,
     deleteProfile,
-    updateProfile
+    updateProfile,
+    getProfileByUserId
 };

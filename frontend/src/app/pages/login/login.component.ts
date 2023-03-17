@@ -25,12 +25,13 @@ export class LoginComponent implements OnInit {
 
   onLogin(form: FormGroup) {
     this.error = '';
-    const data = { email: form.get('email')?.value, password: form.get('password')?.value}
+    const data = { email: form.get('email')?.value, password: form.get('password')?.value};
     this.userService.login(data).subscribe((data: any) => {
       if(data.message == "OK") {
         console.log(data);
         localStorage.setItem('token', data.token);
         localStorage.setItem('userid', data.id);
+        localStorage.setItem('role', data.role);
         this.router.navigate(['dashboard']);
       }
     }, (err: HttpErrorResponse) => {console.log(err); this.error = err.message;});

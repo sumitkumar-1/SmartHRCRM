@@ -2,9 +2,9 @@ const ShortListedProfile = require('../models/shortlistedprofile.model');
 const { v4: uuidv4 } = require('uuid');
 
 const createShortListedProfile = async (request, response) => {
-    const { demandid, processingdate, operator, status } = request.body;
+    const { userid, demandid, companyname, jobdescription, scheduledate, status, venue, mode, duration, panel, operator } = request.body;
 
-    const shortlistedprofile = new ShortListedProfile({ id: uuidv4(), demandid, processingdate, operator, status });
+    const shortlistedprofile = new ShortListedProfile({ id: uuidv4(), userid, demandid, companyname, jobdescription, scheduledate, status, venue, mode, duration, panel, operator });
     try {
         await shortlistedprofile.save();
         response.status(201).json(shortlistedprofile);
@@ -52,10 +52,17 @@ const deleteShortListedProfile = async (request, response) => {
 const updateShortListedProfile = async (request, response) => {
   const { id } = request.params;
   const updates = {
+    userid: request.body.userid,
     demandid: request.body.demandid,
-    processingdate: request.body.processingdate,
-    operator: request.body.operator,
-    status: request.body.status
+    companyname: request.body.companyname,
+    jobdescription: request.body.jobdescription,
+    scheduledate: request.body.scheduledate,
+    status: request.body.status,
+    venue: request.body.venue,
+    mode: request.body.mode,
+    duration: request.body.duration,
+    panel: request.body.panel,
+    operator: request.body.operator
   };
 
   ShortListedProfile.query("id").eq(id).exec((error, results) => {

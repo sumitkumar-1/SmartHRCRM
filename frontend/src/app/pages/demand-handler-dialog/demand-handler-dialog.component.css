@@ -1,0 +1,17 @@
+.full-width{
+    width: 100%;
+}
+
+.top-padding{
+    padding-top: 3px;
+}
+
+.form-container{
+    margin: 100px;
+}
+
+.mat-icon {
+    height: 20px !important;
+    width: 20px !important;
+    font-size: 20px !important;
+}

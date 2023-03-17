@@ -1,6 +1,6 @@
 const express = require("express");
 const app = express();
-var cors = require('cors');
+const cors = require('cors');
 require("dotenv").config();
 const path = require('path');
 
@@ -15,6 +15,7 @@ const profileRouter = require('./routes/profile.route');
 const shortlistedProfileRouter = require('./routes/shortlistedprofile.route');
 const vendorRouter = require('./routes/vendor.route');
 const uploaderRouter = require('./routes/uploader.route');
+const inteviewRouter = require('./routes/interview.route');
 
 app.use('/api', sessionRouter);
 app.use('/api', uploaderRouter);
@@ -24,6 +25,7 @@ app.use('/api/demandhandler', demandhandlerRouter);
 app.use('/api/profile', profileRouter);
 app.use('/api/shortlistedprofile', shortlistedProfileRouter);
 app.use('/api/vendor', vendorRouter);
+app.use('/api/interview', inteviewRouter);
 
 app.use(express.static(path.join(__dirname, 'views')));
 

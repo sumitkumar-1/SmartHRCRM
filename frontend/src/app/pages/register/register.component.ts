@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { User } from './../../interfaces/Users';
 import { UserService } from './../../services/user.service';
@@ -13,7 +14,7 @@ export class RegisterComponent implements OnInit {
 
   registerForm!: FormGroup;
   
-  constructor(private formBuilder: FormBuilder, private userService: UserService) { }
+  constructor(private formBuilder: FormBuilder, private userService: UserService, private router: Router) { }
 
   ngOnInit(): void {
     this.registerForm = this.formBuilder.group({
@@ -47,7 +48,7 @@ export class RegisterComponent implements OnInit {
       createdat: ''
     };
     this.userService.registerUser(user).subscribe((data: any) => {
-      console.log(data);
+      this.router.navigate(['login']);
     }, (err: HttpErrorResponse) => { console.log(err);});
   }
 

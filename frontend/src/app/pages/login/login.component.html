@@ -17,6 +17,7 @@
                         <mat-error *ngIf="loginForm.controls.password.invalid">Please enter valid password</mat-error>
                     </mat-form-field>
                     <button mat-raised-button color="primary" [disabled]="loginForm.invalid">Login</button>
+                    <button mat-raised-button color="primary" routerLink="/register" style="margin-left: 5px;">SignUp</button>
                     <mat-error *ngIf="error != ''">{{ error }}</mat-error>
                 </form>
             </mat-card-content>

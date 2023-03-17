@@ -1,0 +1,37 @@
+<app-header></app-header>
+<div style="text-align: right; margin: 20px;"><button mat-raised-button color="primary" (click)="openAddVendorDialog()"><mat-icon>add</mat-icon> Add Vendor</button></div>
+<div class="grid-container" style="margin: 50px;">
+  <div *ngFor="let vendor of dataSource" class="grid-item">
+    <mat-card class="vendor-card" [routerLink]="['/vendordetail', vendor.id]">
+      <mat-card-header>
+        <div mat-card-avatar class="vendor-logo">
+          <img [src]="vendor.logo" alt="{{ vendor.name }} logo" width="50" height="50" />
+        </div>
+        <mat-card-title>{{ vendor.name }}</mat-card-title>
+        <mat-card-subtitle>
+          <mat-icon [ngClass]="{ 'status-active': vendor.status === 'Hiring', 'status-inactive': vendor.status !== 'Hiring' }">
+            {{ vendor.status === 'Hiring' ? 'check_circle' : 'cancel' }}
+          </mat-icon>
+          {{ vendor.status }}
+        </mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="vendor-details">
+          <div class="vendor-detail">
+            <mat-icon>email</mat-icon>
+            <span>{{ vendor.email }}</span>
+          </div>
+          <div class="vendor-detail">
+            <mat-icon>phone</mat-icon>
+            <span>{{ vendor.phone }}</span>
+          </div>
+          <div class="vendor-detail">
+            <mat-icon>location_on</mat-icon>
+            <span>{{ vendor.location }}</span>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
+<app-footer></app-footer>

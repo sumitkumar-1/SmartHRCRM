@@ -14,6 +14,7 @@ dynamoose.aws.sdk = AWS;
 const demandHandlerSchema = new dynamoose.Schema({
   id: { type: String, hashKey: true, index: true },
   demandid: { type: String, index: true },
+  handlername: { type: String, index: true },
   processingdate: { type: String, index: true },
   operator: { type: String, index: true },
   status: { type: String, index: true },

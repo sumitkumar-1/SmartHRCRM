@@ -13,7 +13,9 @@ dynamoose.aws.sdk = AWS;
 
 const demandSchema = new dynamoose.Schema({
   id: { type: String, hashKey: true, index: true },
+  vendorid: { type: String, required: true },
   description: { type: String, required: true },
+  vacancy: { type: String, required: true },
   level: { type: String, required: true },
   qualification: { type: String, required: true },
   contact: { type: String, required: true },

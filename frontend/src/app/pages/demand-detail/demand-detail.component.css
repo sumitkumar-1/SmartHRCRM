@@ -1,0 +1,44 @@
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+
+.logo {
+    display: block;
+    margin: 0 auto;
+    max-width: 200px;
+    padding-top: 20px;
+}
+
+h1,
+h2 {
+    text-align: center;
+    margin-top: 30px;
+}
+
+table {
+    border-collapse: collapse;
+    margin-top: 30px;
+    width: 100%;
+}
+
+th,
+td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+.upcoming {
+    background-color: #d6f5d6;
+}
+
+.past {
+    background-color: #f5d6d6;
+}
+
+.review {
+    background-color: #d6d6f5;
+}

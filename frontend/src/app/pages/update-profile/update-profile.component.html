@@ -1,4 +1,10 @@
-<form [formGroup]="profileForm" class="form-container">
+<div style="margin: 100px;" *ngIf="!profileAvailable">
+  <h2 style="display: flex; justify-content: center;">No Profile Available, Please create profile</h2>
+  <div style="display: flex; justify-content: center;">
+    <button (click)="onCreate()" mat-raised-button color="primary"><mat-icon>add</mat-icon> Create</button>
+  </div>
+</div>
+<form *ngIf="profileAvailable" [formGroup]="profileForm" class="form-container">
     <mat-card>
       <mat-card-content>
         <div class="row">
@@ -153,12 +159,22 @@
         </div>
         <div class="row">
             <div class="col-md-12">
+                <mat-label>Upload CV</mat-label>
                 <div style="display: flex; align-items: center;">
-                    <input (change)="this.onFilechange($event)" [disabled]="profileForm.disabled" class="form-control" type="file" id="formFile">
-                    <button mat-raised-button color="primary" [disabled]="profileForm.disabled" (click)="this.upload()"><mat-icon>upload</mat-icon></button>
+                    <input (change)="this.onFilechange($event, 'CV')" [disabled]="profileForm.disabled" class="form-control" type="file" id="formFile">
+                    <button mat-raised-button color="primary" [disabled]="profileForm.disabled" (click)="this.upload('CV')"><mat-icon>upload</mat-icon></button>
                 </div>
             </div>
         </div>
+        <div class="row" style="margin-top: 10px;">
+          <div class="col-md-12">
+            <mat-label>Upload Profile Picture</mat-label>
+              <div style="display: flex; align-items: center;">
+                  <input (change)="this.onFilechange($event, 'Profile')" [disabled]="profileForm.disabled" class="form-control" type="file" id="profileformFile">
+                  <button mat-raised-button color="primary" [disabled]="profileForm.disabled" (click)="this.upload('Profile')"><mat-icon>upload</mat-icon></button>
+              </div>
+          </div>
+      </div>
       </mat-card-content>
       <mat-card-actions style="text-align: right;">
         <button (click)="onEdit()" mat-raised-button color="primary" *ngIf="profileForm.disabled"><mat-icon>edit</mat-icon> Edit</button>

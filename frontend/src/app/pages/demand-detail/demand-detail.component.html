@@ -1,0 +1,136 @@
+<app-header></app-header>
+<div class="container">
+  <table>
+    <caption></caption>
+    <tr>
+      <th>ID</th>
+      <td>{{demandDetail.id}}</td>
+    </tr>
+    <tr>
+      <th>Vendor Name</th>
+      <td>ABC Company</td>
+    </tr>
+    <tr>
+      <th>Description</th>
+      <td>{{demandDetail.description}}</td>
+    </tr>
+    <tr>
+      <th>Level</th>
+      <td>{{demandDetail.level}}</td>
+    </tr>
+    <tr>
+      <th>Number of Position</th>
+      <td>{{demandDetail.vacancy}}</td>
+    </tr>
+    <tr>
+      <th>Qualification</th>
+      <td>{{demandDetail.qualification}}</td>
+    </tr>
+    <tr>
+      <th>Contact</th>
+      <td>{{demandDetail.contact}}</td>
+    </tr>
+    <tr>
+      <th>Position</th>
+      <td>{{demandDetail.position}}</td>
+    </tr>
+    <tr>
+      <th>Skills</th>
+      <td>{{demandDetail.skills}}</td>
+    </tr>
+    <tr>
+      <th>Exprerience From</th>
+      <td>{{demandDetail.yearofexpfrom}}</td>
+    </tr>
+    <tr>
+      <th>Experience To</th>
+      <td>{{demandDetail.yearofexpto}}</td>
+    </tr>
+    <tr>
+      <th>Work Location</th>
+      <td>{{demandDetail.worklocation}}</td>
+    </tr>
+    <tr>
+      <th>Work Mode</th>
+      <td>{{demandDetail.workmode}}</td>
+    </tr>
+    <tr>
+      <th>Max Notice Period</th>
+      <td>{{demandDetail.maxnoticeperiod}}</td>
+    </tr>
+    <tr>
+      <th>Min Notice Period</th>
+      <td>{{demandDetail.minnoticeperiod}}</td>
+    </tr>
+    <tr>
+      <th>Min Salary</th>
+      <td>{{demandDetail.minsalary}}</td>
+    </tr>
+    <tr>
+      <th>Max Salary</th>
+      <td>{{demandDetail.maxsalary}}</td>
+    </tr>
+    <tr>
+      <th>Start Date</th>
+      <td>{{demandDetail.startdate}}</td>
+    </tr>
+    <tr>
+      <th>End Date</th>
+      <td>{{demandDetail.enddate}}</td>
+    </tr>
+    <tr>
+      <th>Updated At</th>
+      <td>{{demandDetail.updatedat}}</td>
+    </tr>
+    <tr>
+      <th>Created At</th>
+      <td>{{demandDetail.createdat}}</td>
+    </tr>
+  </table>
+  <h1>Demand Handlers</h1>
+  <div style="text-align: right">
+    <button (click)="openAddMemberDialog()" color="primary" mat-raised-button aria-label="Add New Handler">
+      <mat-icon>add</mat-icon>
+    </button>
+  </div>
+  <table>
+    <caption></caption>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Added On</th>
+        <th>Added By</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of demandHandlers">
+        <td>{{item.handlername}}</td>
+        <td>{{item.processingdate}}</td>
+        <td>{{item.operator}}</td>
+        <td>{{item.status}}</td>
+      </tr>
+    </tbody>
+  </table>
+  <h1>ShortListed Candidate</h1>
+  <table>
+    <caption></caption>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Added On</th>
+        <th>Added By</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of shortListedProfiles">
+        <td>{{getName(item.userid)}}</td>
+        <td>{{item.createdat}}</td>
+        <td>{{item.operator}}</td>
+        <td>{{item.status}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<app-footer></app-footer>

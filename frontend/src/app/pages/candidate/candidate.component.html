@@ -1,0 +1,15 @@
+<app-header></app-header>
+<div style="text-align: right; margin: 20px;"><button mat-raised-button color="primary" (click)="openAddInterviewDialog()"><mat-icon>add</mat-icon> Schedule Interview</button></div>
+<h1>Available Candidates</h1>
+	<div class="grid" style="margin: 50px;">
+		<div class="card" *ngFor="let item of dataSource" [routerLink]="['/candidatedetail', item.id]">
+			<img [src]="item.profileurl" alt="Candidate 1">
+			<div class="details">
+				<h3>{{item.firstname + ' ' + item.lastname}}</h3>
+				<p class="location">{{item.currentlocation}}</p>
+				<p class="ctc">{{item.ctc}} per year</p>
+				<p class="experience">{{item.totalexp}} of experience</p>
+			</div>
+		</div>
+	</div>
+<app-footer></app-footer>

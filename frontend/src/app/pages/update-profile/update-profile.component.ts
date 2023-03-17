@@ -14,8 +14,10 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 })
 export class UpdateProfileComponent implements OnInit {
   
+  profileAvailable: boolean = false;
   profileForm!: FormGroup;
   file!: File;
+  profileFile!: File;
 
   visible = true;
   selectable = true;
@@ -49,16 +51,50 @@ export class UpdateProfileComponent implements OnInit {
       gender: ['', [Validators.required]],
       status: ['', [Validators.required]],
       cvurl: ['', [Validators.required]],
+      profileurl: ['', [Validators.required]],
       designation: ['', [Validators.required]]
     });
 
     this.profileForm.disable();
+    this.getProfileData();
+  }
 
-    this.profileForm.patchValue({
-      firstname: 'Rob',
-      lastname: 'Randle',
+  getProfileData() {
+    const userId = localStorage.getItem('userid') || '';
+    this.profileService.getProfileByUserId(userId).subscribe((data: any) => {
+      if(data.message != undefined) {
+        this.profileAvailable = false;
+      }else {
+        this.profileAvailable = true;
+        this.profileForm.patchValue({
+          firstname: data.firstname,
+          lastname: data.lastname,
+          contact: data.contact,
+          email: data.email,
+          alternatecontact: data.alternatecontact,
+          whatsappcontact: data.whatsappcontact,
+          linkedinprofile: data.linkedinprofile,
+          skills: data.skills.split(',').map((name: any) => (this.skills.push({name}))),
+          totalexp: data.totalexp,
+          relevantexp: data.relevantexp,
+          currentorganization: data.currentorganization,
+          noticeperiod: data.noticeperiod,
+          currentlocation: data.currentlocation,
+          prefferedlocation: data.prefferedlocation,
+          ctc: data.ctc,
+          ectc: data.ectc,
+          gender: data.gender,
+          status: data.status,
+          cvurl: data.cvurl,
+          profileurl: data.profileurl,
+          designation: data.designation
+        });
+      }
     });
-    "C++,JAVA,Python".split(',').map(name => (this.skills.push({name})));
+  }
+
+  onCreate() {
+    this.profileAvailable = !this.profileAvailable;
   }
 
   add(event: MatChipInputEvent): void {
@@ -76,18 +112,23 @@ export class UpdateProfileComponent implements OnInit {
     }
   }
 
-  onFilechange(event: any) {
+  onFilechange(event: any, type: string) {
     console.log(event.target.files[0])
-    this.file = event.target.files[0];
+    if(type == "CV"){
+      this.file = event.target.files[0];
+    }else {
+      this.profileFile = event.target.files[0];
+    }
   }
   
-  upload() {
-    if (this.file) {
+  upload(type: string) {
+    const uploadfile = type == "CV" ? this.file : this.profileFile;
+    if (uploadfile) {
       const formData: FormData = new FormData();
-      formData.append('file', this.file);
+      formData.append('file', uploadfile);
       this.uploadService.uploadFile(formData).subscribe((data: any) => {
         console.log(data);
-        this.profileForm.get('cvurl')?.setValue(data.location);
+        this.profileForm.get(type == "CV" ? 'cvurl' : 'profileurl')?.setValue(data.location);
       });
     } else {
       alert("Please select a file first")
@@ -119,6 +160,7 @@ export class UpdateProfileComponent implements OnInit {
       gender: form.get('gender')?.value,
       status: form.get('status')?.value,
       cvurl: form.get('cvurl')?.value,
+      profileurl: form.get('profileurl')?.value,
       designation: form.get('designation')?.value,
       updatedat: '',
       createdat: ''

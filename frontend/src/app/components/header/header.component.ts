@@ -20,6 +20,7 @@ export class HeaderComponent implements OnInit {
     this.userService.logout().subscribe((data: any) => {
       localStorage.removeItem('token');
       localStorage.removeItem('userid');
+      localStorage.removeItem('role');
       this.router.navigate(['login']);
     }, (err: HttpErrorResponse) => {console.log(err)});
     console.log("logout");

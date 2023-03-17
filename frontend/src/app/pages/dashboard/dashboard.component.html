@@ -1,2 +1,10 @@
 <app-header></app-header>
+<div style="margin: 100px">
+  <mat-grid-list cols="3" rowHeight="3:1">
+    <mat-grid-tile class="tile" *ngFor="let item of dashboardItems | dashboardFilter" [routerLink]="item.route">
+        <mat-icon>{{ item.icon }}</mat-icon>
+        <span>{{ item.name }}</span>
+    </mat-grid-tile>
+  </mat-grid-list>
+</div>
 <app-footer></app-footer>

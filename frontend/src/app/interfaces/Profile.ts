@@ -20,6 +20,7 @@ export interface Profile {
     gender: string;
     status: string;
     cvurl: string;
+    profileurl: string;
     designation: string;
     updatedat: string;
     createdat: string;

@@ -1,0 +1,96 @@
+<app-header></app-header>
+<div class="container">
+    <img src="{{candidateDetail.profileurl}}" alt="Company Logo" class="logo">
+    <table>
+        <caption></caption>
+        <tr>
+            <th>ID:</th>
+            <td>{{candidateDetail.id}}</td>
+        </tr>
+        <tr>
+            <th>Name:</th>
+            <td>{{candidateDetail.firstname + ' ' + candidateDetail.lastname}}</td>
+        </tr>
+        <tr>
+            <th>Email:</th>
+            <td>{{candidateDetail.email}}</td>
+        </tr>
+        <tr>
+            <th>Contact</th>
+            <td>{{candidateDetail.contact}}</td>
+        </tr>
+        <tr>
+            <th>Alternate Contact</th>
+            <td>{{candidateDetail.alternatecontact}}</td>
+        </tr>
+        <tr>
+            <th>Whatsapp Contact</th>
+            <td>{{candidateDetail.whatsappcontact}}</td>
+        </tr>
+        <tr>
+            <th>LinkedIn</th>
+            <td><a href="{{candidateDetail.linkedinprofile}}">{{candidateDetail.linkedinprofile}}</a></td>
+        </tr>
+        <tr>
+            <th>Skills</th>
+            <td>{{candidateDetail.skills}}</td>
+        </tr>
+        <tr>
+            <th>Total Experience</th>
+            <td>{{candidateDetail.totalexp}}</td>
+        </tr>
+        <tr>
+            <th>Relevant Experience</th>
+            <td>{{candidateDetail.relevantexp}}</td>
+        </tr>
+        <tr>
+            <th>Current Organization</th>
+            <td>{{candidateDetail.currentorganization}}</td>
+        </tr>
+        <tr>
+            <th>Notice Period</th>
+            <td>{{candidateDetail.noticeperiod}}</td>
+        </tr>
+        <tr>
+            <th>Current Location</th>
+            <td>{{candidateDetail.currentlocation}}</td>
+        </tr>
+        <tr>
+            <th>Preffered Location</th>
+            <td>{{candidateDetail.prefferedlocation}}</td>
+        </tr>
+        <tr>
+            <th>CTC</th>
+            <td>{{candidateDetail.ctc}}</td>
+        </tr>
+        <tr>
+            <th>Expected CTC</th>
+            <td>{{candidateDetail.ectc}}</td>
+        </tr>
+        <tr>
+            <th>Gender</th>
+            <td>{{candidateDetail.gender}}</td>
+        </tr>
+        <tr>
+            <th>CV URL</th>
+            <td><a href="{{candidateDetail.cvurl}}">{{candidateDetail.cvurl}}</a></td>
+        </tr>
+        <tr>
+            <th>Designation</th>
+            <td>{{candidateDetail.designation}}</td>
+        </tr>
+        <tr class="upcoming">
+            <th>Status:</th>
+            <td>{{candidateDetail.status}}</td>
+        </tr>
+        <tr>
+            <th>Created At</th>
+            <td>{{candidateDetail.createdat}}</td>
+        </tr>
+        <tr>
+            <th>Updated At</th>
+            <td>{{candidateDetail.updatedat}}</td>
+        </tr>
+    </table>
+</div>
+<app-footer></app-footer>

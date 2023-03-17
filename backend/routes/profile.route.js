@@ -7,6 +7,7 @@ const Auth = require('../middleware/auth');
 router.post('/', Auth.verifyToken, ProfileController.createProfile);
 router.get('/', Auth.verifyToken, ProfileController.getProfiles);
 router.get('/:id', Auth.verifyToken, ProfileController.getProfileById);
+router.get('/user/:id', Auth.verifyToken, ProfileController.getProfileByUserId);
 router.patch('/:id', Auth.verifyToken, ProfileController.updateProfile);
 router.delete('/:id', Auth.verifyToken, ProfileController.deleteProfile);
 

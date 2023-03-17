@@ -26,6 +26,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatNativeDateModule, MatOptionModule, MatRippleModule } from '@angular/material/core';
+
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -46,9 +47,23 @@ import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { UpdateProfileComponent } from './pages/update-profile/update-profile.component';
+import { DashboardFilterPipe } from './pipes/dashboard-filter.pipe';
+import { InterviewsComponent } from './pages/interviews/interviews.component';
+import { VendorComponent } from './pages/vendor/vendor.component';
+import { CandidateComponent } from './pages/candidate/candidate.component';
+import { DemandComponent } from './pages/demand/demand.component';
+import { AddVendorDialogComponent } from './pages/add-vendor-dialog/add-vendor-dialog.component';
+import { InterviewDetailComponent } from './pages/interview-detail/interview-detail.component';
+import { VendorDetailComponent } from './pages/vendor-detail/vendor-detail.component';
+import { CandidateDetailComponent } from './pages/candidate-detail/candidate-detail.component';
+import { DemandDetailComponent } from './pages/demand-detail/demand-detail.component';
+import { DemandHandlerDialogComponent } from './pages/demand-handler-dialog/demand-handler-dialog.component';
+import { AddInterviewDialogComponent } from './pages/add-interview-dialog/add-interview-dialog.component';
+import { AddDemandDialogComponent } from './pages/add-demand-dialog/add-demand-dialog.component';
+import { AuthInterceptor } from './guards/AuthInterceptor';
 
 @NgModule({
   declarations: [
@@ -59,7 +74,20 @@ import { UpdateProfileComponent } from './pages/update-profile/update-profile.co
     RegisterComponent,
     DashboardComponent,
     ProfileComponent,
-    UpdateProfileComponent
+    UpdateProfileComponent,
+    DashboardFilterPipe,
+    InterviewsComponent,
+    VendorComponent,
+    CandidateComponent,
+    DemandComponent,
+    AddVendorDialogComponent,
+    InterviewDetailComponent,
+    VendorDetailComponent,
+    CandidateDetailComponent,
+    DemandDetailComponent,
+    DemandHandlerDialogComponent,
+    AddInterviewDialogComponent,
+    AddDemandDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -107,7 +135,13 @@ import { UpdateProfileComponent } from './pages/update-profile/update-profile.co
     FormsModule,
     NgbModule
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

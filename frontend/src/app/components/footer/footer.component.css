@@ -1,7 +1,8 @@
 .footer {
-    position: fixed;
+    /*position: fixed;*/
     bottom: 0;
     width: 100%;
     display: flex;
     justify-content: center;
+    height: 50px;
 }

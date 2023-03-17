@@ -1,0 +1,72 @@
+<h1 mat-dialog-title>Add Vendor</h1>
+<div mat-dialog-content>
+  <form [formGroup]="addVendorform">
+    <div class="row">
+        <div class="col-sm-12">
+            <mat-form-field class="full-width" appearance="outline">
+                <mat-label>Vendor Name</mat-label>
+                <input matInput formControlName="vendorname" placeholder="Vendor Name" />
+            </mat-form-field>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <mat-form-field class="full-width" appearance="outline">
+                <mat-label>Email</mat-label>
+                <input matInput formControlName="email" placeholder="Email" />
+            </mat-form-field>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <mat-form-field class="full-width" appearance="outline">
+                <mat-label>Status</mat-label>
+                <input matInput formControlName="status" placeholder="Status" />
+            </mat-form-field>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <mat-form-field class="full-width" appearance="outline">
+                <mat-label>Primary Contact</mat-label>
+                <input matInput formControlName="primarycontact" placeholder="Primary Contact" />
+            </mat-form-field>
+            
+        </div>
+        <div class="col-md-6">
+            <mat-form-field class="full-width" appearance="outline">
+                <mat-label>Phone</mat-label>
+                <input matInput formControlName="phone" placeholder="Phone" />
+            </mat-form-field>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <mat-form-field class="full-width" appearance="outline">
+                <mat-label>Location</mat-label>
+                <input matInput formControlName="location" placeholder="Location" />
+            </mat-form-field>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <mat-form-field class="full-width" appearance="outline">
+                <mat-label>Address</mat-label>
+                <input matInput formControlName="address" placeholder="Address" />
+            </mat-form-field>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div style="display: flex; align-items: center;">
+                <input (change)="this.onFilechange($event)" [disabled]="addVendorform.disabled" class="form-control" type="file" id="formFile">
+                <button mat-raised-button color="primary" [disabled]="addVendorform.disabled" (click)="this.upload()"><mat-icon>upload</mat-icon></button>
+            </div>
+        </div>
+    </div>
+  </form>
+</div>
+<div mat-dialog-actions>
+  <button mat-raised-button color="primary" (click)="onCancel()">Cancel</button>
+  <button mat-raised-button color="primary" (click)="onSave()">Save</button>
+</div>
