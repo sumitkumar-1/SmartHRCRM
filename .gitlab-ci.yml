@@ -8,6 +8,8 @@ stages:
   - deploy
 
 variables:
+  DOCKER_HOST: tcp://grad.cs.dal.ca:2375
+  DOCKER_TLS_CERTDIR: ""
   GIT_STRATEGY: clone
   IMAGE_NAME: csci5409-b00904097-repo
   ECR_REGISTRY: 230825027461.dkr.ecr.us-east-1.amazonaws.com
