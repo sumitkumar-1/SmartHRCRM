@@ -21,6 +21,7 @@ before_script:
 build:
   stage: build
   script:
+    - sleep 30 # Wait for DIND to start up
     - docker build -t $IMAGE_NAME .
     - docker tag $IMAGE_NAME:$ECR_TAG $ECR_REGISTRY/$ECR_REPO:$ECR_TAG
   artifacts:
