@@ -1,4 +1,4 @@
-const Profile = require('../models/Profile.model');
+const Profile = require('../models/profile.model');
 const { v4: uuidv4 } = require('uuid');
 
 const createProfile = async (request, response) => {

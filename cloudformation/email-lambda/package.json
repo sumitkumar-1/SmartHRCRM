@@ -1,0 +1,16 @@
+{
+  "name": "csci_5409_term_project_labmda",
+  "version": "1.0.0",
+  "description": "csci 5409 backend email api",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "author": "sumit.kumar",
+  "license": "ISC",
+  "dependencies": {
+    "aws-sdk": "^2.1312.0",
+    "dotenv": "^16.0.3"
+  }
+}

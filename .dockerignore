@@ -1,2 +1,4 @@
 *node_modules*
 *cloudformation*
+**/node_modules
+**/dist

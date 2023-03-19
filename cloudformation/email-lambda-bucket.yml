@@ -1,14 +1,15 @@
 AWSTemplateFormatVersion: 2010-09-09
-Description: Bucket Creation
+Description: Bucket for keeping lambda zip files
 Resources:
-  ProjectBucket:
+  ProjectLambdaBucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: "smarthrcrm"
+      BucketName: "project-lamdba-bucket"
+
   MyBucketPolicy:
     Type: AWS::S3::BucketPolicy
     Properties:
-      Bucket: !Ref ProjectBucket
+      Bucket: !Ref ProjectLambdaBucket
       PolicyDocument:
         {
           "Version": "2012-10-17",
@@ -18,7 +19,7 @@ Resources:
               "Effect": "Allow",
               "Principal": "*",
               "Action": "s3:GetObject",
-              "Resource": "arn:aws:s3:::smarthrcrm/*"
+              "Resource": "arn:aws:s3:::project-lamdba-bucket/*"
             }
           ]
         }

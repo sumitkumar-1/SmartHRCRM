@@ -1,18 +1,354 @@
 AWSTemplateFormatVersion: 2010-09-09
-Description: VPC using Cloudformation
-Parameters:
-  repoName: 
-    Description: Name for ecr repo 
-    Type: String
+Description: Infrastructure setup using ECS, ECR and Cloudformation for term project
 Resources:
-  ecrRepo:
-    Type: AWS::ECR::Repository
-    Properties: 
-      RepositoryName: !Sub ${repoName}-repo
-      ImageScanningConfiguration: 
-        ScanOnPush: true
+  ProjectB00904097Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: "smarthrcrm"
+
+  MyBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref ProjectB00904097Bucket
+      PolicyDocument:
+        {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Sid": "PublicReadGetObject",
+              "Effect": "Allow",
+              "Principal": "*",
+              "Action": "s3:GetObject",
+              "Resource": "arn:aws:s3:::smarthrcrm/*"
+            }
+          ]
+        }
+
+  EmailSNSTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      DisplayName: My Email SNS Topic
+      TopicName: project-sns-topic
+
+  EmailLambdaFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        S3Bucket: project-lamdba-bucket
+        S3Key: email-lambda.zip
+      Environment:
+        Variables:
+          SNS_TOPIC_ARN: !Ref EmailSNSTopic
+      Handler: index.handler
+      Role: arn:aws:iam::230825027461:role/LabRole
+      Runtime: nodejs14.x
+
+  EmailApi:
+    Type: AWS::ApiGateway::RestApi
+    Properties:
+      Name: email-api
+
+  EmailApiResource:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      ParentId: !GetAtt EmailApi.RootResourceId
+      PathPart: email
+      RestApiId: !Ref EmailApi
+
+  EmailApiMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      ResourceId: !Ref EmailApiResource
+      RestApiId: !Ref EmailApi
+      HttpMethod: POST
+      AuthorizationType: NONE
+      Integration:
+        Type: AWS_PROXY
+        IntegrationHttpMethod: POST
+        Uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${EmailLambdaFunction.Arn}/invocations
+
+  EmailDeployment:
+    Type: AWS::ApiGateway::Deployment
+    DependsOn: EmailApiMethod
+    Properties:
+      RestApiId: !Ref EmailApi
+      StageName: prod
+
+  ProjectB00904097VPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: "10.0.0.0/16"
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      InstanceTenancy: default
+      Tags:
+        - Key: Name
+          Value: "ProjectB00904097VPC"
+
+  ProjectB00904097Subnet1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref ProjectB00904097VPC
+      CidrBlock: "10.0.1.0/24"
+      AvailabilityZone: us-east-1a
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: "ProjectB00904097Subnet1"
+
+  ProjectB00904097Subnet2:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref ProjectB00904097VPC
+      CidrBlock: "10.0.2.0/24"
+      AvailabilityZone: us-east-1b
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: "ProjectB00904097Subnet2"
+
+  ProjectB00904097InternetGateway:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: Name
+          Value: ProjectB00904097InternetGateway
+
+  ProjectB00904097InternetGatewayAttachment:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: !Ref ProjectB00904097VPC
+      InternetGatewayId: !Ref ProjectB00904097InternetGateway
+
+  ProjectB00904097RoutingTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref ProjectB00904097VPC
+      Tags:
+        - Key: Name
+          Value: ProjectB00904097RoutingTable
+
+  ProjectB00904097PublicSubnetRouteTableAssociation1:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref ProjectB00904097Subnet1
+      RouteTableId: !Ref ProjectB00904097RoutingTable
+
+  ProjectB00904097PublicSubnetRouteTableAssociation2:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref ProjectB00904097Subnet2
+      RouteTableId: !Ref ProjectB00904097RoutingTable
+
+  ProjectB00904097Route:
+    Type: AWS::EC2::Route
+    DependsOn: ProjectB00904097InternetGatewayAttachment
+    Properties:
+      RouteTableId: !Ref ProjectB00904097RoutingTable
+      DestinationCidrBlock: "0.0.0.0/0"
+      GatewayId: !Ref ProjectB00904097InternetGateway
+
+  ProjectB00904097Cluster:
+    Type: AWS::ECS::Cluster
+    Properties:
+      ClusterName: csci5409-b00904097-project-cluster
+
+  ProjectB00904097ALB:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      Name: "ProjectB00904097ALB"
+      Subnets:
+        - !Ref ProjectB00904097Subnet1
+        - !Ref ProjectB00904097Subnet2
+      SecurityGroups:
+        - !Ref ProjectB00904097SecurityGroup
+      Type: application
+      Scheme: internet-facing
+      IpAddressType: ipv4
+
+  ProjectB00904097Listener:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    DependsOn: ProjectB00904097ALB
+    Properties:
+      DefaultActions:
+        - Type: forward
+          TargetGroupArn: !Ref ProjectB00904097TargetGroup
+      LoadBalancerArn: !Ref ProjectB00904097ALB
+      Port: 80
+      Protocol: HTTP
+
+  ProjectB00904097SecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: "Security group for the ALB"
+      VpcId: !Ref ProjectB00904097VPC
+      SecurityGroupIngress:
+        - IpProtocol: "-1"
+          CidrIp: "0.0.0.0/0"
+
+  ProjectB00904097ContainerSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: "Security group for the container"
+      VpcId: !Ref ProjectB00904097VPC
+      SecurityGroupIngress:
+        - SourceSecurityGroupId: !Ref ProjectB00904097SecurityGroup
+          IpProtocol: "-1"
+
+  ProjectB00904097TargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    DependsOn: ProjectB00904097ALB
+    Properties:
+      Name: "ProjectB00904097TargetGroup"
+      Port: 80
+      Protocol: HTTP
+      VpcId: !Ref ProjectB00904097VPC
+      TargetType: ip
+
+  ProjectB00904097ServiceTargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Name: ProjectB00904097ServiceTargetGroup
+      VpcId: !Ref ProjectB00904097VPC
+      Port: 80
+      Protocol: HTTP
+      Matcher:
+        HttpCode: 200-299
+      HealthCheckIntervalSeconds: 10
+      HealthCheckPath: /stat
+      HealthCheckProtocol: HTTP
+      HealthCheckTimeoutSeconds: 5
+      HealthyThresholdCount: 10
+      TargetType: ip
+
+  ListenerRule:
+    Type: AWS::ElasticLoadBalancingV2::ListenerRule
+    Properties:
+      ListenerArn: !Ref ProjectB00904097Listener
+      Priority: 2
+      Conditions:
+        - Field: path-pattern
+          Values:
+            - /*
+      Actions:
+        - TargetGroupArn: !Ref ProjectB00904097ServiceTargetGroup
+          Type: forward
+
+  CloudWatchLogsGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: 'csci5409-b00904097-project'
+      RetentionInDays: 1
+
+  ProjectB00904097ECSTaskDefinition:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      Family: csci5409-b00904097-project-ecs-task
+      Cpu: "256"
+      Memory: "512"
+      NetworkMode: awsvpc
+      RequiresCompatibilities:
+        - FARGATE
+      ExecutionRoleArn: arn:aws:iam::230825027461:role/LabRole
+      TaskRoleArn: arn:aws:iam::230825027461:role/LabRole
+      ContainerDefinitions:
+        - Name: csci5409-b00904097-project-container
+          Image: 230825027461.dkr.ecr.us-east-1.amazonaws.com/csci5409-b00904097-project-repo:latest
+          Essential: true
+          Cpu: 256
+          Memory: 512
+          PortMappings:
+            - ContainerPort: 80
+              Protocol: tcp
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
+              awslogs-group: 'csci5409-b00904097-project'
+              awslogs-region: us-east-1
+              awslogs-stream-prefix: 'nodeapp'
+
+  ProjectB00904097ECSService:
+    Type: AWS::ECS::Service
+    DependsOn: ProjectB00904097Listener
+    Properties:
+      Cluster: !Ref ProjectB00904097Cluster
+      ServiceName: csci5409-b00904097-project-ecs-service
+      DesiredCount: 1
+      TaskDefinition: !Ref ProjectB00904097ECSTaskDefinition
+      LaunchType: FARGATE
+      DeploymentConfiguration:
+        MaximumPercent: 200
+        MinimumHealthyPercent: 70
+      NetworkConfiguration:
+        AwsvpcConfiguration:
+          Subnets:
+            - !Ref ProjectB00904097Subnet1
+            - !Ref ProjectB00904097Subnet2
+          SecurityGroups:
+            - !Ref ProjectB00904097ContainerSecurityGroup
+          AssignPublicIp: ENABLED
+      LoadBalancers:
+        - ContainerName: csci5409-b00904097-project-container
+          ContainerPort: 80
+          TargetGroupArn: !Ref ProjectB00904097TargetGroup
+
 Outputs:
-  ecrArn:
-    Value: !GetAtt ecrRepo.Arn
+  VPC:
+    Description: VPC
+    Value: !Ref ProjectB00904097VPC
     Export:
-      Name: ecrArn
+      Name: 'VPC'
+
+  Subnet1:
+    Description: 'Subnet 1 on AZ1'
+    Value: !Ref ProjectB00904097Subnet1
+    Export:
+      Name: 'Subnet1'
+
+  Subnet2:
+    Description: 'Subnet 2 on AZ2'
+    Value: !Ref ProjectB00904097Subnet2
+    Export:
+      Name: 'Subnet2'
+
+  Cluster:
+    Value: !Ref ProjectB00904097Cluster
+    Export:
+      Name: 'ECSCluster'
+
+  Listener:
+    Description: listener port 80
+    Value: !Ref ProjectB00904097Listener
+    Export:
+      Name: 'Listener'
+
+  ContainerSecurityGroup:
+    Description: container security group
+    Value: !Ref ProjectB00904097ContainerSecurityGroup
+    Export:
+      Name: 'ContainerSecurityGroup'
+
+  LoadBalancerDNS:
+    Description: Domain name for the loadbalancer
+    Value: !GetAtt ProjectB00904097ALB.DNSName
+    Export:
+      Name: 'DomainName'
+
+  ECSTaskExecutionRole:
+    Description: ECS Task Execution Role
+    Value: arn:aws:iam::230825027461:role/LabRole
+    Export:
+      Name: 'ECSTaskExecutionRole'
+
+  ApiEndpoint:
+    Description: Node Server API Endpoint
+    Value: !Join ['', ['http://', !GetAtt ProjectB00904097ALB.DNSName, '/']]
+    Export:
+      Name: 'BackendApiEndpoint'
+
+  BucketName:
+    Value: !Ref ProjectB00904097Bucket
+    Description: "The name of the created S3 bucket."
+
+  EmailApiEndpoint:
+    Value: !Sub "https://${EmailApi}.execute-api.${AWS::Region}.amazonaws.com/prod/email"

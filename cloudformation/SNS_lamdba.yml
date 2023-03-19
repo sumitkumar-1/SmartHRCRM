@@ -1,0 +1,93 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: SNS Test
+Resources:
+  EmailSNSTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      DisplayName: My Email SNS Topic
+      TopicName: project-sns-topic
+
+  EmailLambdaFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        ZipFile: |
+          const AWS = require('aws-sdk');
+          const sns = new AWS.SNS();
+
+          exports.handler = async (event) => {
+            const { httpMethod, path, body } = event;
+            const email = JSON.parse(body).email;
+            const message = JSON.parse(body).message;
+            console.log("message = " + message);
+            console.log("email = " + email);
+            const params = {
+              Destination: {
+                ToAddresses: [email]
+              },
+              Message: {
+                Body: {
+                  Text: {
+                    Data: message
+                  }
+                },
+                Subject: {
+                  Data: 'New message from your website'
+                }
+              },
+              Source: 'sumit.kumar@dal.ca'
+            };
+
+            try {
+              await new AWS.SES({ apiVersion: '2010-12-01' }).sendEmail(params).promise();
+              console.log(`Email sent to ${email}`);
+            } catch (err) {
+              console.log(err);
+            }
+          };
+      Handler: index.handler
+      Role: arn:aws:iam::230825027461:role/LabRole
+      Runtime: nodejs14.x
+      Environment:
+        Variables:
+          SNS_TOPIC_ARN: !Ref EmailSNSTopic
+
+  EmailApi:
+    Type: AWS::ApiGateway::RestApi
+    Properties:
+      Name: email-api
+
+  EmailApiResource:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      ParentId: !GetAtt EmailApi.RootResourceId
+      PathPart: email
+      RestApiId: !Ref EmailApi
+
+  EmailApiMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      ResourceId: !Ref EmailApiResource
+      RestApiId: !Ref EmailApi
+      HttpMethod: POST
+      AuthorizationType: NONE
+      Integration:
+        Type: AWS_PROXY
+        IntegrationHttpMethod: POST
+        Uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${EmailLambdaFunction.Arn}/invocations
+
+  EmailDeployment:
+    Type: AWS::ApiGateway::Deployment
+    DependsOn: EmailApiMethod
+    Properties:
+      RestApiId: !Ref EmailApi
+      StageName: prod
+
+  EmailPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !GetAtt EmailLambdaFunction.Arn
+      Principal: apigateway.amazonaws.com
+    DependsOn:
+      - EmailDeployment
