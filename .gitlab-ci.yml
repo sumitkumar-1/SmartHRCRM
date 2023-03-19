@@ -15,19 +15,17 @@ variables:
   ECR_TAG: latest
   AWS_DEFAULT_REGION: us-east-1
 
-before_script:
-  - echo "before script"
-
 build:
   stage: build
   script:
-    - sleep 30 # Wait for DIND to start up
     - docker build -t $IMAGE_NAME .
     - docker tag $IMAGE_NAME:$ECR_TAG $ECR_REGISTRY/$ECR_REPO:$ECR_TAG
   artifacts:
     paths:
       - $IMAGE_NAME
     expire_in: 1 week
+  tags:
+    - docker-runner
 
 deploy:
   stage: deploy
@@ -36,3 +34,5 @@ deploy:
     - eval $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION)
     - eval $(aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $ECR_REGISTRY)
     - docker push $ECR_REGISTRY/$ECR_REPO:$ECR_TAG
+  tags:
+      - docker-runner
