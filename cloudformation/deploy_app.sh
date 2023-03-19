@@ -7,7 +7,7 @@
 region=us-east-1
 paramFile=ecr.json
 templateFile=ecr.yml
-stackName=csci5409_b00904097_repo
+stackName=csci5409-b00904097-repo
 
 aws cloudformation create-stack --stack-name $stackName --template-body file://$templateFile --parameter file://$paramFile --region=$region
 
