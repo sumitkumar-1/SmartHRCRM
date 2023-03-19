@@ -1,4 +1,4 @@
-image: docker:latest
+image: docker:stable
 
 services:
   - docker:dind
@@ -8,8 +8,6 @@ stages:
   - deploy
 
 variables:
-  DOCKER_HOST: tcp://grad.cs.dal.ca:2375
-  DOCKER_TLS_CERTDIR: ""
   GIT_STRATEGY: clone
   IMAGE_NAME: csci5409-b00904097-repo
   ECR_REGISTRY: 230825027461.dkr.ecr.us-east-1.amazonaws.com
@@ -29,8 +27,6 @@ build:
     paths:
       - $IMAGE_NAME
     expire_in: 1 week
-  tags:
-    - dalfcs_gitlab_docker_ci
 
 deploy:
   stage: deploy
@@ -39,5 +35,3 @@ deploy:
     - eval $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION)
     - eval $(aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $ECR_REGISTRY)
     - docker push $ECR_REGISTRY/$ECR_REPO:$ECR_TAG
-  tags:
-    - dalfcs_gitlab_docker_ci
