@@ -5,11 +5,14 @@
 ##############################################################################################################################################
 
 region=us-east-1
-paramFile=ecr.json
-templateFile=ecr.yml
+paramFile=./cloudformation/ecr.json
+templateFile=./cloudformation/ecr.yml
+infraFile=./cloudformation/infra.yml
 stackName=csci5409-b00904097-repo
+ecrRepository=230825027461.dkr.ecr.us-east-1.amazonaws.com
 
 aws cloudformation create-stack --stack-name $stackName --template-body file://$templateFile --parameter file://$paramFile --region=$region
+aws cloudformation wait stack-create-complete --stack-name $stackName --region $region
 
 ##############################################################################################################################################
 # STEP 2 - Build and Push Docker Image to ECR using cloudformation
@@ -18,20 +21,20 @@ aws cloudformation create-stack --stack-name $stackName --template-body file://$
 imageName=${stackName}
 
 # Login to aws ECR and change docker registry
-aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 230825027461.dkr.ecr.us-east-1.amazonaws.com
+aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin $ecrRepository
 
 # Build local docker image
 docker build -t ${imageName} .
 
 # Tag Docker Image
-docker tag ${imageName}:latest 230825027461.dkr.ecr.us-east-1.amazonaws.com/${imageName}:latest
+docker tag ${imageName}:latest $ecrRepository/${imageName}:latest
 
 # Push Docker image to ECR repository
-docker push 230825027461.dkr.ecr.us-east-1.amazonaws.com/${imageName}:latest
+docker push $ecrRepository/${imageName}:latest
 
 
 ##############################################################################################################################################
-# STEP 3 - Deploy Docker image from ECR Repository to ECS
+# STEP 3 - Deploy Docker image from ECR Repository to ECS, Infrastructure setup
 ##############################################################################################################################################
 
-
+aws cloudformation create-stack --stack-name %stackName%-infra --template-body file://$infraFile

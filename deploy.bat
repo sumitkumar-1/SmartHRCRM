@@ -6,6 +6,7 @@ REM ############################################################################
 set region=us-east-1
 set paramFile=.\cloudformation\ecr.json
 set templateFile=.\cloudformation\ecr.yml
+set infraFile=.\cloudformation\infra.yml
 set stackName=csci5409-b00904097-repo
 set ecrRepository=230825027461.dkr.ecr.us-east-1.amazonaws.com
 
@@ -36,8 +37,7 @@ set imageName=%stackName%
 echo "Login to AWS ECR and change Docker registry"
 
 REM Login to AWS ECR and change Docker registry
-for /f "tokens=*" %%A in ('aws ecr get-login-password --region %region%') do set password=%%A
-echo %password% | docker login --username AWS --password-stdin %ecrRepository%
+aws ecr get-login-password --region %region% | docker login --username AWS --password-stdin %ecrRepository%
 
 echo "Building local Docker image"
 REM Build local Docker image
@@ -64,6 +64,11 @@ echo "Docker image pushed to ECR repository successfully"
 
 
 REM ##############################################################################################################################################
-REM STEP 3 - Deploy Docker image from ECR Repository to ECS
+REM STEP 3 - Deploy Docker image from ECR Repository to ECS, Infrastructure setup
 REM ##############################################################################################################################################
 
+aws cloudformation create-stack --stack-name %stackName%-infra --template-body file://%infraFile%
+if %ERRORLEVEL% NEQ 0 (
+    echo "Error: Failed during Infrastructure setup, stack=%stackName%-infra"
+    exit /b 1
+)

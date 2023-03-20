@@ -24,56 +24,6 @@ Resources:
           ]
         }
 
-  EmailSNSTopic:
-    Type: AWS::SNS::Topic
-    Properties:
-      DisplayName: My Email SNS Topic
-      TopicName: project-sns-topic
-
-  EmailLambdaFunction:
-    Type: AWS::Lambda::Function
-    Properties:
-      Code:
-        S3Bucket: project-lamdba-bucket
-        S3Key: email-lambda.zip
-      Environment:
-        Variables:
-          SNS_TOPIC_ARN: !Ref EmailSNSTopic
-      Handler: index.handler
-      Role: arn:aws:iam::230825027461:role/LabRole
-      Runtime: nodejs14.x
-
-  EmailApi:
-    Type: AWS::ApiGateway::RestApi
-    Properties:
-      Name: email-api
-
-  EmailApiResource:
-    Type: AWS::ApiGateway::Resource
-    Properties:
-      ParentId: !GetAtt EmailApi.RootResourceId
-      PathPart: email
-      RestApiId: !Ref EmailApi
-
-  EmailApiMethod:
-    Type: AWS::ApiGateway::Method
-    Properties:
-      ResourceId: !Ref EmailApiResource
-      RestApiId: !Ref EmailApi
-      HttpMethod: POST
-      AuthorizationType: NONE
-      Integration:
-        Type: AWS_PROXY
-        IntegrationHttpMethod: POST
-        Uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${EmailLambdaFunction.Arn}/invocations
-
-  EmailDeployment:
-    Type: AWS::ApiGateway::Deployment
-    DependsOn: EmailApiMethod
-    Properties:
-      RestApiId: !Ref EmailApi
-      StageName: prod
-
   ProjectB00904097VPC:
     Type: AWS::EC2::VPC
     Properties:
@@ -253,7 +203,7 @@ Resources:
       TaskRoleArn: arn:aws:iam::230825027461:role/LabRole
       ContainerDefinitions:
         - Name: csci5409-b00904097-project-container
-          Image: 230825027461.dkr.ecr.us-east-1.amazonaws.com/csci5409-b00904097-project-repo:latest
+          Image: 230825027461.dkr.ecr.us-east-1.amazonaws.com/csci5409-b00904097-repo:latest
           Essential: true
           Cpu: 256
           Memory: 512
