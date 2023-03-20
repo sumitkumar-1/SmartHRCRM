@@ -57,18 +57,18 @@ Resources:
         - Key: Name
           Value: "ProjectB00904097Subnet2"
 
-  ProjectB00904097InternetGateway:
+  ProjectInternetGateway:
     Type: AWS::EC2::InternetGateway
     Properties:
       Tags:
         - Key: Name
-          Value: ProjectB00904097InternetGateway
+          Value: ProjectInternetGateway
 
-  ProjectB00904097InternetGatewayAttachment:
+  ProjectIntGatewayAttachment:
     Type: AWS::EC2::VPCGatewayAttachment
     Properties:
       VpcId: !Ref ProjectB00904097VPC
-      InternetGatewayId: !Ref ProjectB00904097InternetGateway
+      InternetGatewayId: !Ref ProjectInternetGateway
 
   ProjectB00904097RoutingTable:
     Type: AWS::EC2::RouteTable
@@ -78,13 +78,13 @@ Resources:
         - Key: Name
           Value: ProjectB00904097RoutingTable
 
-  ProjectB00904097PublicSubnetRouteTableAssociation1:
+  PublicSubnetRouteTableAssoc1:
     Type: AWS::EC2::SubnetRouteTableAssociation
     Properties:
       SubnetId: !Ref ProjectB00904097Subnet1
       RouteTableId: !Ref ProjectB00904097RoutingTable
 
-  ProjectB00904097PublicSubnetRouteTableAssociation2:
+  PublicSubnetRouteTableAssoc2:
     Type: AWS::EC2::SubnetRouteTableAssociation
     Properties:
       SubnetId: !Ref ProjectB00904097Subnet2
@@ -92,11 +92,11 @@ Resources:
 
   ProjectB00904097Route:
     Type: AWS::EC2::Route
-    DependsOn: ProjectB00904097InternetGatewayAttachment
+    DependsOn: ProjectIntGatewayAttachment
     Properties:
       RouteTableId: !Ref ProjectB00904097RoutingTable
       DestinationCidrBlock: "0.0.0.0/0"
-      GatewayId: !Ref ProjectB00904097InternetGateway
+      GatewayId: !Ref ProjectInternetGateway
 
   ProjectB00904097Cluster:
     Type: AWS::ECS::Cluster
@@ -136,7 +136,7 @@ Resources:
         - IpProtocol: "-1"
           CidrIp: "0.0.0.0/0"
 
-  ProjectB00904097ContainerSecurityGroup:
+  ProjectContainerSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
       GroupDescription: "Security group for the container"
@@ -155,10 +155,10 @@ Resources:
       VpcId: !Ref ProjectB00904097VPC
       TargetType: ip
 
-  ProjectB00904097ServiceTargetGroup:
+  ProjectServiceTargetGroup:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties:
-      Name: ProjectB00904097ServiceTargetGroup
+      Name: ProjectServiceTargetGroup
       VpcId: !Ref ProjectB00904097VPC
       Port: 80
       Protocol: HTTP
@@ -181,7 +181,7 @@ Resources:
           Values:
             - /*
       Actions:
-        - TargetGroupArn: !Ref ProjectB00904097ServiceTargetGroup
+        - TargetGroupArn: !Ref ProjectServiceTargetGroup
           Type: forward
 
   CloudWatchLogsGroup:
@@ -190,7 +190,7 @@ Resources:
       LogGroupName: 'csci5409-b00904097-project'
       RetentionInDays: 1
 
-  ProjectB00904097ECSTaskDefinition:
+  ProjectECSTaskDefinition:
     Type: AWS::ECS::TaskDefinition
     Properties:
       Family: csci5409-b00904097-project-ecs-task
@@ -224,7 +224,7 @@ Resources:
       Cluster: !Ref ProjectB00904097Cluster
       ServiceName: csci5409-b00904097-project-ecs-service
       DesiredCount: 1
-      TaskDefinition: !Ref ProjectB00904097ECSTaskDefinition
+      TaskDefinition: !Ref ProjectECSTaskDefinition
       LaunchType: FARGATE
       DeploymentConfiguration:
         MaximumPercent: 200
@@ -235,7 +235,7 @@ Resources:
             - !Ref ProjectB00904097Subnet1
             - !Ref ProjectB00904097Subnet2
           SecurityGroups:
-            - !Ref ProjectB00904097ContainerSecurityGroup
+            - !Ref ProjectContainerSecurityGroup
           AssignPublicIp: ENABLED
       LoadBalancers:
         - ContainerName: csci5409-b00904097-project-container
@@ -274,7 +274,7 @@ Outputs:
 
   ContainerSecurityGroup:
     Description: container security group
-    Value: !Ref ProjectB00904097ContainerSecurityGroup
+    Value: !Ref ProjectContainerSecurityGroup
     Export:
       Name: 'ContainerSecurityGroup'
 
@@ -299,6 +299,3 @@ Outputs:
   BucketName:
     Value: !Ref ProjectB00904097Bucket
     Description: "The name of the created S3 bucket."
-
-  EmailApiEndpoint:
-    Value: !Sub "https://${EmailApi}.execute-api.${AWS::Region}.amazonaws.com/prod/email"
