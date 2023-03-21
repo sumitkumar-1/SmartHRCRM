@@ -2,12 +2,12 @@ const express = require('express');
 const router = express.Router();
 
 const DemandController = require('../controllers/demand.controller');
-const Auth = require('../middleware/auth');
+const Auth = require('../middleware/userauth');
 
-router.post('/', Auth.verifyToken, DemandController.createDemand);
-router.get('/', Auth.verifyToken, DemandController.getDemands);
-router.get('/:id', Auth.verifyToken, DemandController.getDemandById);
-router.patch('/:id', Auth.verifyToken, DemandController.updateDemand);
-router.delete('/:id', Auth.verifyToken, DemandController.deleteDemand);
+router.post('/', Auth.verifyUserToken, DemandController.createDemand);
+router.get('/', Auth.verifyUserToken, DemandController.getDemands);
+router.get('/:id', Auth.verifyUserToken, DemandController.getDemandById);
+router.patch('/:id', Auth.verifyUserToken, DemandController.updateDemand);
+router.delete('/:id', Auth.verifyUserToken, DemandController.deleteDemand);
 
 module.exports = router;
