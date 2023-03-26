@@ -1,6 +1,7 @@
 const bcrypt = require('bcryptjs');
 const User = require('../models/user.model');
 const { v4: uuidv4 } = require('uuid');
+const Notification = require('../utils/Notification');
 
 const createUser = async (request, response) => {
     const { email, password, role, firstname, lastname, dob, sex, city, country } = request.body;
@@ -13,6 +14,7 @@ const createUser = async (request, response) => {
           const user = new User({ id: uuidv4(), email, password: hashedPassword, role, firstname, lastname, dob, sex, city, country });
           try {
               user.save();
+              Notification.notify({email: email, subject: 'Welcome to Smart-HR-CRM', message: 'You have successfully created smarthrcrm account: ' + email})
               response.status(201).json(user);
           } catch (err) {
               response.status(400).json({ message: err.message });
@@ -86,6 +88,7 @@ const updateUser = async (request, response) => {
           if(error) {
             return response.status(400).json({ message: error });
           }else {
+            Notification.notify({email: email, subject: 'Smart-HR-CRM', message: 'You have successfully updated smarthrcrm account: ' + email})
             return response.json(user);
           }
         });

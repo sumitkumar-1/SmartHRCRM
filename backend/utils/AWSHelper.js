@@ -10,6 +10,7 @@ AWS.config.update({
 });
 
 const s3 = new AWS.S3();
+const sns = new AWS.SNS();
 
 function uploadFile(request) {
   const fileContent = fs.readFileSync(request.file.path);
@@ -29,6 +30,22 @@ function uploadFile(request) {
   });
 }
 
+function publishNotification(message) {
+  const params = {
+    Message: JSON.stringify(message),
+    TopicArn: process.env.SNS_TOPIC_ARN
+  };
+  
+  sns.publish(params, function(err, data) {
+    if (err) {
+      console.log('Error publishing message:', err);
+    } else {
+      console.log('Message published:', data);
+    }
+  });
+}
+
 module.exports = {
-    uploadFile
+    uploadFile,
+    publishNotification
 }

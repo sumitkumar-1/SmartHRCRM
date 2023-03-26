@@ -24,6 +24,81 @@ Resources:
           ]
         }
 
+  EmailSNSTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      DisplayName: My Email SNS Topic
+      TopicName: project-sns-topic
+
+  MySNSTopicEmailSubscription:
+    Type: 'AWS::SNS::Subscription'
+    Properties:
+      Protocol: 'email'
+      TopicArn: !Ref EmailSNSTopic
+      Endpoint: 'sumit.kumar@dal.ca'
+
+  MySNSTopicLambdaSubscription:
+    Type: 'AWS::SNS::Subscription'
+    DependsOn: EmailLambdaFunction
+    Properties:
+      Protocol: 'lambda'
+      TopicArn: !Ref EmailSNSTopic
+      Endpoint: !GetAtt EmailLambdaFunction.Arn
+
+  EmailLambdaFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        ZipFile: |
+          import os
+          import smtplib
+          import json
+          from email.mime.text import MIMEText
+          from email.mime.multipart import MIMEMultipart
+          from email.mime.image import MIMEImage
+
+          def handler(event, context):
+              params = json.loads(event['Records'][0]['Sns']['Message'])
+              print(params)
+              sender_email = os.environ.get('EMAIL')
+              receiver_email = params['email']
+              subject = params['subject']
+              body = params['message']
+              
+              msg = MIMEMultipart()
+              msg['From'] = sender_email
+              msg['To'] = receiver_email
+              msg['Subject'] = subject
+              
+              msg.attach(MIMEText(body, 'plain'))
+              
+              with smtplib.SMTP('smtp.gmail.com', 587) as smtp:
+                  smtp.starttls()
+                  smtp.login(sender_email, os.environ.get('PASSWORD'))
+                  smtp.sendmail(sender_email, receiver_email, msg.as_string())
+                  print('Email sent successfully!')
+                  return {
+                      'statusCode': 200,
+                      'body': 'Email sent successfully'
+                  }
+      Handler: index.handler
+      FunctionName: ProjectEmailLamdba
+      Role: arn:aws:iam::230825027461:role/LabRole
+      Runtime: python3.8
+      Environment:
+        Variables:
+          SNS_TOPIC_ARN: !Ref EmailSNSTopic
+          EMAIL: rajrutdev14@gmail.com
+          PASSWORD: hcippryikbxkeahr
+
+  LambdaInvokePermission:
+    Type: "AWS::Lambda::Permission"
+    Properties:
+      FunctionName: !Ref EmailLambdaFunction
+      Action: "lambda:InvokeFunction"
+      Principal: "sns.amazonaws.com"
+      SourceArn: !Ref EmailSNSTopic
+
   ProjectB00904097VPC:
     Type: AWS::EC2::VPC
     Properties:
@@ -243,6 +318,12 @@ Resources:
           TargetGroupArn: !Ref ProjectB00904097TargetGroup
 
 Outputs:
+  SNSTopic:
+    Description: SNSTopic
+    Value: !Ref EmailSNSTopic
+    Export:
+      Name: 'SNSTopic'
+
   VPC:
     Description: VPC
     Value: !Ref ProjectB00904097VPC
