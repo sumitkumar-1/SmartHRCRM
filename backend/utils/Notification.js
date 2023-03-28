@@ -1,4 +1,4 @@
-const AWSHelper = require('AWSHelper');
+const AWSHelper = require('./AWSHelper');
 
 function notify(message) {
     AWSHelper.publishNotification(message);

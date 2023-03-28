@@ -24,6 +24,13 @@ Resources:
           ]
         }
 
+  EmailNotificationSecret:
+    Type: AWS::SecretsManager::Secret
+    Properties:
+      Name: email-secret
+      Description: secret for email for sending email notification
+      SecretString: '{"email":"rajrutdev14@gmail.com","password":"hcippryikbxkeahr"}'
+
   EmailSNSTopic:
     Type: AWS::SNS::Topic
     Properties:
@@ -50,17 +57,21 @@ Resources:
     Properties:
       Code:
         ZipFile: |
-          import os
           import smtplib
           import json
+          import boto3
           from email.mime.text import MIMEText
           from email.mime.multipart import MIMEMultipart
           from email.mime.image import MIMEImage
 
           def handler(event, context):
+              secrets_manager = boto3.client('secretsmanager')
+              response = secrets_manager.get_secret_value(SecretId='email-secret')
+              secret = json.loads(response['SecretString'])
+
               params = json.loads(event['Records'][0]['Sns']['Message'])
               print(params)
-              sender_email = os.environ.get('EMAIL')
+              sender_email = secret['email']
               receiver_email = params['email']
               subject = params['subject']
               body = params['message']
@@ -74,7 +85,7 @@ Resources:
               
               with smtplib.SMTP('smtp.gmail.com', 587) as smtp:
                   smtp.starttls()
-                  smtp.login(sender_email, os.environ.get('PASSWORD'))
+                  smtp.login(sender_email, secret['password'])
                   smtp.sendmail(sender_email, receiver_email, msg.as_string())
                   print('Email sent successfully!')
                   return {

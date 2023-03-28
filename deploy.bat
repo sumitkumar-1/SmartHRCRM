@@ -4,7 +4,8 @@ REM STEP 0 - Build Application and copy to destination path
 REM ##############################################################################################################################################
 
 cd frontend
-npm run build
+cmd /c npm install
+cmd /c npm run build
 cd ..
 xcopy /s /e /y .\frontend\dist\smart-hr-crm\* .\backend\views\
 
@@ -62,6 +63,9 @@ docker tag %imageName%:latest %ecrRepository%/%imageName%:latest || (
   exit /b 1
 )
 
+REM Login to AWS ECR and change Docker registry
+aws ecr get-login-password --region %region% | docker login --username AWS --password-stdin %ecrRepository%
+
 echo "Pushing Docker image to ECR repository"
 REM Push Docker image to ECR repository
 docker push %ecrRepository%/%imageName%:latest || (
@@ -81,3 +85,11 @@ if %ERRORLEVEL% NEQ 0 (
     echo "Error: Failed during Infrastructure setup, stack=%stackName%-infra"
     exit /b 1
 )
+
+aws cloudformation wait stack-create-complete --stack-name %stackName%-infra --region %region%
+if %ERRORLEVEL% NEQ 0 (
+    echo "Error: Failed to create stack %stackName%-infra"
+    exit /b 1
+)
+
+echo "Infrastructure Deployed Successfully !!"
