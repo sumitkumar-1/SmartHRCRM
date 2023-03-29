@@ -16,6 +16,7 @@ const shortlistedProfileRouter = require('./routes/shortlistedprofile.route');
 const vendorRouter = require('./routes/vendor.route');
 const uploaderRouter = require('./routes/uploader.route');
 const inteviewRouter = require('./routes/interview.route');
+const configRouter = require('./routes/config.route');
 
 app.use('/api', sessionRouter);
 app.use('/api', uploaderRouter);
@@ -26,6 +27,7 @@ app.use('/api/profile', profileRouter);
 app.use('/api/shortlistedprofile', shortlistedProfileRouter);
 app.use('/api/vendor', vendorRouter);
 app.use('/api/interview', inteviewRouter);
+app.use('/api/config', configRouter);
 
 app.use(express.static(path.join(__dirname, 'views')));
 

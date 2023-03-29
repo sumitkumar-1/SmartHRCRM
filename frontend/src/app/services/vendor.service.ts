@@ -1,17 +1,22 @@
 import { Vendor } from './../interfaces/Vendor';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
+import { ConfigService } from './config.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class VendorService {
 
-  apiUrl: string = environment.server + "/vendor";
+  apiUrl!: string;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private configService: ConfigService) { 
+    this.configService.getBackendUrl().then(backendUrl => {
+      console.log(backendUrl);
+      this.apiUrl = backendUrl + '/vendor';
+    })
+  }
 
   getHeader() {
     const options = {

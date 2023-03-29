@@ -2,16 +2,21 @@ import { Demand } from './../interfaces/Demand';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { environment } from 'src/environments/environment';
+import { ConfigService } from './config.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DemandService {
+  
+  apiUrl!: string;
 
-  apiUrl: string = environment.server + "/demand";
-
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private configService: ConfigService) { 
+    this.configService.getBackendUrl().then(backendUrl => {
+      console.log(backendUrl);
+      this.apiUrl = backendUrl + '/demand';
+    })
+  }
 
   getHeader() {
     const options = {

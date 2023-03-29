@@ -2,9 +2,9 @@ const Profile = require('../models/profile.model');
 const { v4: uuidv4 } = require('uuid');
 
 const createProfile = async (request, response) => {
-    const { userid, firstname, lastname, email, contact, alternatecontact, whatsappcontact, linkedinprofile, skills, totalexp, relevantexp, currentorganization, noticeperiod, currentlocation, prefferedlocation, ctc, ectc, gender, status, cvurl, designation } = request.body;
+    const { userid, firstname, lastname, email, contact, alternatecontact, whatsappcontact, linkedinprofile, skills, totalexp, relevantexp, currentorganization, noticeperiod, currentlocation, prefferedlocation, ctc, ectc, gender, status, cvurl, profileurl, designation } = request.body;
     console.log(request.body);
-    const profile = new Profile({ id: uuidv4(), userid, firstname, lastname, email, contact, alternatecontact, whatsappcontact, linkedinprofile, skills, totalexp, relevantexp, currentorganization, noticeperiod, currentlocation, prefferedlocation, ctc, ectc, gender, status, cvurl, designation });
+    const profile = new Profile({ id: uuidv4(), userid, firstname, lastname, email, contact, alternatecontact, whatsappcontact, linkedinprofile, skills, totalexp, relevantexp, currentorganization, noticeperiod, currentlocation, prefferedlocation, ctc, ectc, gender, status, cvurl, profileurl, designation });
     try {
         await profile.save();
         response.status(201).json(profile);
@@ -88,6 +88,7 @@ const updateProfile = async (request, response) => {
     gender: request.body.gender,
     status: request.body.status,
     cvurl: request.body.cvurl,
+    profileurl: request.body.profileurl,
     designation: request.body.designation
   };
 

@@ -1,16 +1,21 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { environment } from 'src/environments/environment';
+import { ConfigService } from './config.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UploadService {
 
-  apiUrl: string = environment.server + "/upload";
+  apiUrl!: string;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private configService: ConfigService) { 
+    this.configService.getBackendUrl().then(backendUrl => {
+      console.log(backendUrl);
+      this.apiUrl = backendUrl + '/upload';
+    })
+  }
 
   getHeader() {
     const options = {

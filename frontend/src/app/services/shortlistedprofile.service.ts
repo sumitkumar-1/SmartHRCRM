@@ -1,17 +1,22 @@
 import { ShortListedProfile } from './../interfaces/ShortListedProfile';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
+import { ConfigService } from './config.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ShortlistedprofileService {
+  
+  apiUrl!: string;
 
-  apiUrl: string = environment.server + "/shortlistedprofile";
-
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private configService: ConfigService) { 
+    this.configService.getBackendUrl().then(backendUrl => {
+      console.log(backendUrl);
+      this.apiUrl = backendUrl + '/shortlistedprofile';
+    })
+  }
 
   getHeader() {
     const options = {

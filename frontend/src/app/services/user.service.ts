@@ -1,17 +1,24 @@
-import { environment } from './../../environments/environment';
 import { Observable } from 'rxjs';
 import { User } from './../interfaces/Users';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { ConfigService } from './config.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
 
-  apiUrl: string = environment.server + "/users";
+  apiUrl!: string;
+  backendUrl!: string;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private configService: ConfigService) { 
+    this.configService.getBackendUrl().then(backendUrl => {
+      console.log(backendUrl);
+      this.backendUrl = backendUrl;
+      this.apiUrl = backendUrl + '/users';
+    })
+  }
 
   getHeader() {
     const options = {
@@ -35,10 +42,10 @@ export class UserService {
   }
 
   login(data: any): Observable<any> {
-    return this.http.post(environment.server + '/login', data);
+    return this.http.post(this.backendUrl + '/login', data);
   }
 
   logout(): Observable<any> {
-    return this.http.post(environment.server + '/logout', {});
+    return this.http.post(this.backendUrl + '/logout', {});
   }
 }
