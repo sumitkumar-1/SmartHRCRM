@@ -64,6 +64,8 @@ Resources:
           from email.mime.multipart import MIMEMultipart
           from email.mime.image import MIMEImage
 
+          #Source sending email using python https://zetcode.com/python/smtplib/
+
           def handler(event, context):
               secrets_manager = boto3.client('secretsmanager')
               response = secrets_manager.get_secret_value(SecretId='email-secret')

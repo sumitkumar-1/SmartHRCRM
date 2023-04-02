@@ -2,6 +2,9 @@ const AWS = require("aws-sdk");
 require("dotenv").config();
 const fs = require("fs");
 
+// source reference taken from 
+//AWS SDK. [Online]. Available: https://www.npmjs.com/package/aws-sdk. [Accessed: Mar. 1, 2023].
+
 AWS.config.update({
   region: process.env.region,
   accessKeyId: process.env.aws_access_key_id,
