@@ -3,6 +3,9 @@ REM ############################################################################
 REM STEP 0 - Build Application and copy to destination path
 REM ##############################################################################################################################################
 
+REM Get the current time
+set start_time=%time%
+
 cd frontend
 cmd /c npm install
 cmd /c npm run build
@@ -93,3 +96,17 @@ if %ERRORLEVEL% NEQ 0 (
 )
 
 echo "Infrastructure Deployed Successfully !!"
+
+REM Get the current time
+set end_time=%time%
+
+REM Calculate the duration in milliseconds
+set /a duration=(1%end_time:~0,2%-100)*3600000 + (1%end_time:~3,2%-100)*60000 + (1%end_time:~6,2%-100)*1000 + (1%end_time:~9,2%-100)*10 - ((1%start_time:~0,2%-100)*3600000 + (1%start_time:~3,2%-100)*60000 + (1%start_time:~6,2%-100)*1000 + (1%start_time:~9,2%-100)*10)
+
+REM Convert the duration to minutes
+set /a duration=duration/60000
+
+REM Print the start time, end time, and duration
+echo Start time: %start_time%
+echo End time: %end_time%
+echo Duration: %duration% minutes
