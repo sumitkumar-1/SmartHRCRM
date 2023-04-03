@@ -332,6 +332,9 @@ Resources:
         - ContainerName: csci5409-b00904097-project-container
           ContainerPort: 80
           TargetGroupArn: !Ref ProjectB00904097TargetGroup
+        - ContainerName: csci5409-b00904097-project-container
+          ContainerPort: 80
+          TargetGroupArn: !Ref ProjectServiceTargetGroup
 
 Outputs:
   SNSTopic:

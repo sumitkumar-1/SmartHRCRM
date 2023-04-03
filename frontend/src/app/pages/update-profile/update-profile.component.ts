@@ -128,6 +128,7 @@ export class UpdateProfileComponent implements OnInit {
       formData.append('file', uploadfile);
       this.uploadService.uploadFile(formData).subscribe((data: any) => {
         console.log(data);
+        alert("File Uploaded Successfully");
         this.profileForm.get(type == "CV" ? 'cvurl' : 'profileurl')?.setValue(data.location);
       });
     } else {

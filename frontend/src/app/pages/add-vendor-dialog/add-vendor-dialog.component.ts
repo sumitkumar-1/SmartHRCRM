@@ -51,6 +51,7 @@ export class AddVendorDialogComponent implements OnInit {
       formData.append('file', this.file);
       this.uploadService.uploadFile(formData).subscribe((data: any) => {
         console.log(data);
+        alert("File Uploaded Successfully");
         this.addVendorform.get('logo')?.setValue(data.location);
       });
     } else {
